@@ -44,17 +44,24 @@ async function checkLang(wortObj) {
       })
       .then((response) => {
         // if (gapiAllLimit)return // eger tüm keyler limite ulasilmis ise gapi islemi ne gecilmez....
-        if (response === true) trLang(); //basarili sekilde ceviri sonucu alinmis ise sonraki wortObj e gecilir..
+        if (response === true)
+        {
+          trLang(); //basarili sekilde ceviri sonucu alinmis ise sonraki wortObj e gecilir..
+          return
+        } 
         if (response === "apiLimit") {
           //api limiti durumunda sonraki api ile islem tekrarlanir
           let newKeyIndex = storage.get("gapiLang").index + 1; //api key index no siradaki olarak atanir
           storage.set("gapiLang", newKeyIndex, 12);
           isEmptyLang(); // ayni kelime icin islem yeni key ile tekrar denenir...
         }
-
         //farkli bir hata ola durumu kontrol edilebilir, eger yokse yapi icinde!
-
-        return;
+        msg.add(
+          2,
+          `Warning | ${wortObj.wrt.wort}`,
+          `"Translate: gapi response!" m:lang*js f:wortObj`,
+          response
+        );
       });
   } catch (error) {
     msg.add(
@@ -63,13 +70,21 @@ async function checkLang(wortObj) {
       `"Translate: gapi error!" m:lang*js f:wortObj`,
       error
     );
+    //isleme devam edilmesi icin sonraki kelimeye gecilir...
+    trLang()
   }
 }
 
 async function gapiTranslate(wortObj) {
-  console.log('giristeki key:',key)
-  let key = await  new Promise((resolve) => {resolve(gapiKey()) ;})
-  console.log('alinan key:',key)
+ 
+  let key = await  new Promise((resolve) => {
+
+    console.log('giristeki key:',key)// silinicek---------------
+
+    resolve(gapiKey()) ;})
+
+  console.log('alinan key:',key)// silinicek---------------
+
   return new Promise((resolve, reject) => {
     /** api islem sonucu basarili iee true, ancak key limiti ise key limit geriye dönderilir**/
     if (!!key) {
@@ -95,7 +110,7 @@ async function gapiTranslate(wortObj) {
         .then((response) => response.json())
         .then((response) => {
 
-          console.log(response)
+          console.log(response)// silinicek---------------
 
           if (typeof response.message === "string") {
             //api sorgu limiti
