@@ -48,7 +48,7 @@ async function checkLang(wortObj) {
         if (response === "apiLimit") {
           //api limiti durumunda sonraki api ile islem tekrarlanir
           let newKeyIndex = storage.get("gapiLang").index + 1; //api key index no siradaki olarak atanir
-          storage.set("gapiLang", newKeyIndex, 24);
+          storage.set("gapiLang", newKeyIndex, 12);
           isEmptyLang(); // ayni kelime icin islem yeni key ile tekrar denenir...
         }
 
@@ -67,7 +67,9 @@ async function checkLang(wortObj) {
 }
 
 async function gapiTranslate(wortObj) {
-  let key = await  new Promise((resolve) => {resolve(gapiKey(wortObj)) ;})
+  console.log('giristeki key:',key)
+  let key = await  new Promise((resolve) => {resolve(gapiKey()) ;})
+  console.log('alinan key:',key)
   return new Promise((resolve, reject) => {
     /** api islem sonucu basarili iee true, ancak key limiti ise key limit geriye dönderilir**/
     if (!!key) {
@@ -92,6 +94,9 @@ async function gapiTranslate(wortObj) {
       )
         .then((response) => response.json())
         .then((response) => {
+
+          console.log(response)
+
           if (typeof response.message === "string") {
             //api sorgu limiti
             resolve("apiLimit");
@@ -114,11 +119,13 @@ async function gapiTranslate(wortObj) {
   });
 }
 
-async function gapiKey(wortObj) {
-  return await checkStorage().then((result) => {
+async function gapiKey() {
+  return await checkStorage()
+  .then((result) => {
     let localStorage = result;
     return new Promise((resolve, reject) => {
       //kullanilacak keyi secer ve geriye dönderi
+      //key test >> https://rapidapi.com/googlecloud/api/google-translate1/
       const gapi = [
         "7a7b531352msh47e6e582c9a0340p181ba8jsnfd06f4a6b0e3",
         "4169b729a4mshdfbcf80a2cd8e6cp15bd53jsnaf3a9c946fa8",
@@ -145,7 +152,7 @@ async function gapiKey(wortObj) {
         }
       } else {
         //eger localStorage'de bulunmuyorsa yeni bir obje olusturulur...
-        storage.set("gapiLang", keyIndex, 24); //obje kullanim süresi 24 saat olarak ayarlandi...
+        storage.set("gapiLang", keyIndex, 12); //obje kullanim süresi 12 saat olarak ayarlandi...
       }
       resolve(gapi[keyIndex]); //kullanilmak üzere alinan keyIndex value dönderilir
     });
@@ -155,7 +162,7 @@ async function gapiKey(wortObj) {
 
 async function checkStorage() {
   //localStorage'de gapiLang var mi kontrol edilir, var ve bir index no iceriyorsa bu degeri, yoksa false döner
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     resolve(storage.get("gapiLang")); //yok veya index no bulunmaz veya 24 saatte eski ise false döner...
   });
 }
