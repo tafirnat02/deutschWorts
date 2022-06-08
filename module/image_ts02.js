@@ -125,6 +125,13 @@ const setObj = async (wObj) => {
 };
 
 const searchImg = async () => {
+
+  
+  return //silinece--------------------- görsel islem api icin teste kapatildi
+
+
+
+
   let currentWort = wortObjsArr[index].wrt.wort;
   //url olusturulduktan sonra siradaki opsiyona gore alternatif sorgu icin qW'daki secim degistirlir:
   api.cse++;
@@ -195,7 +202,7 @@ const searchImg = async () => {
             msg.add(
               2,
               `${txt[0]} | ${currentWort}`,
-              `${txt[1]} (f:getImg-searchImg)`
+              `${txt[1]} (m:_img, f:searchImg)`
             );
           }
           break;
@@ -220,23 +227,30 @@ const searchImg = async () => {
 };
 
 const getImg = async () => {
-  if (len === undefined) {
-    len = wortObjsArr.length;
-    index = 0;
-  }
-  imgArr.length = 0;
-  api.cse = 0; //aramadaki kelime grubu sifirlanir...
-  if (!!wortObjsArr[index].status.Substantiv[0]) {
-    await setObj(wortObjsArr[index]);
-    await searchImg();
-  }
-  runBar.set(7, index, len);
-  index++;
-  if (index < len && api.status !== false) {
-    getImg();
-  } else {
-    index = 0;
-    callNext();
-    //byController.image = true;
+  try {
+    if (len === undefined) {
+      len = wortObjsArr.length;
+      index = 0;
+    }else{
+      index < len
+    }
+    imgArr.length = 0;
+    api.cse = 0; //aramadaki kelime grubu sifirlanir...
+
+    if (!!wortObjsArr[index].status.Substantiv[0]) {
+      await setObj(wortObjsArr[index]);
+      await searchImg();
+    }
+    runBar.set(7, index, len);
+    index++;
+    if (index < len && api.status !== false) {
+      getImg();
+    } else {
+      index = 0;
+      callNext();
+    }
+  } catch (error) {
+    msg.add(3, `Error  | image [?]`, 
+      `Görsel alinirken hata olustu! (m:_img, f:searchImg)\nwortObjArr.length:${wortObjsArr.length}, index:${index}, len:${len}`, error)
   }
 };
