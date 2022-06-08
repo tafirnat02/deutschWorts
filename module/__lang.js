@@ -65,8 +65,6 @@ async function checkLang(wortObj) {
 }
 
 async function gapiTranslate(wortObj) {
-  return new Promise((resolve, reject) => {
-
   let key = await gapiKey(wortObj);
   return new Promise((resolve, reject) => {
     /** api islem sonucu basarili iee true, ancak key limiti ise key limit geriye dönderilir**/
