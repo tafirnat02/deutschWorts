@@ -77,11 +77,7 @@ async function checkLang(wortObj) {
 
 async function gapiTranslate(wortObj) {
  
-  let key = await  new Promise((resolve) => {
-
-    console.log('giristeki key:',key)// silinicek---------------
-
-    resolve(gapiKey()) ;})
+  var key = await  new Promise((resolve) => {resolve(gapiKey()) ;})
 
   console.log('alinan key:',key)// silinicek---------------
 
