@@ -335,17 +335,7 @@ function setTbls() {
                newWortObj.tbl[tblHead] =itm.querySelector('table').innerHTML
            }
       });
-    /*
-    newWortObj.tbl.prasens = doc
-      .querySelector("a[href*='indikativ/praesens']")
-      .parentNode.nextElementSibling.innerHTML.replaceAll(rpRegExp, "");
-    newWortObj.tbl.praterium = doc
-      .querySelector("a[href*='indikativ/praeteritum']")
-      .parentNode.nextElementSibling.innerHTML.replaceAll(rpRegExp, "");
-    newWortObj.tbl.perfekt = doc
-      .querySelector("a[href*='indikativ/perfekt']")
-      .parentNode.nextElementSibling.innerHTML.replaceAll(rpRegExp, "");
-      */
+
     resolve();
   });
 }
