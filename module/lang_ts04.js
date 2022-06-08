@@ -57,7 +57,7 @@ async function checkLang(wortObj) {
         return;
       });
   } catch (error) {
-    newMsg(
+    msg.add(
       3,
       `Error | ${wortObj.wrt.wort}`,
       `"Translate: gapi error!" m:lang*js f:wortObj`,
