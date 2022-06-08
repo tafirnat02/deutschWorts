@@ -2,7 +2,7 @@ import { runApp } from "./module/creatWortObj_ts01.js";
 import { getDoc } from "./module/documents_ts01.js";
 import { getWortObject } from "./module/getWortObj_ts01.js";
 import { getImg } from "./module/image_ts01.js";
-import { getLang } from "./module/lang_ts01.js";
+import { getLang } from "./module/lang_ts02.js";
 import { baseFun } from "./module/main_ts01.js";
 
 async function loadBase() {

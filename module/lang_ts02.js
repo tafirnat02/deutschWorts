@@ -7,12 +7,14 @@ var gapiAllLimit, index, len;
 //wortObjArr'da tutulan wortObj de TRlang kontrol edilir. Bos ise gapi den cevirisi alinmak üzere diger functionlara yönlendirilir
 
 const isEmptyLang = async() => {
-  if (!gapiAllLimit && wortObjsArr[index].lang_TR == "") {
-    await checkLang(wortObjsArr[index]);
-  } else {
-    if (gapiAllLimit) gapiKeyEnd(wortObjsArr[index].wrt.wort); //eger api limitine ulasilmis ise ekrana msg gösterimi yapilir isleme devam edilmez...
-    trLang(); //sonraki kelimelerdeki TR_lang durumunun bildirilmesi icin bu islem tekrarlanir sadece...
-  }
+if (wortObjsArr[index].lang_TR != "") {trLang(); return }
+
+if (!gapiAllLimit) {
+  await checkLang(wortObjsArr[index]);
+} else {
+  if (gapiAllLimit) gapiKeyEnd(wortObjsArr[index].wrt.wort); //eger api limitine ulasilmis ise ekrana msg gösterimi yapilir isleme devam edilmez...
+  trLang(); //sonraki kelimelerdeki TR_lang durumunun bildirilmesi icin bu islem tekrarlanir sadece...
+}
 };
 
 //wortObjArr dizinindeki tüm ögeler icin routerLang ile islem yapilir
