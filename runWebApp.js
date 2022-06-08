@@ -1,5 +1,5 @@
 
-const modulFiles = "https://cdn.jsdelivr.net/gh/tafirnat02/deutschWort_App@main/importModuls_v1.0.0.js"
+const modulFiles = "https://cdn.jsdelivr.net/gh/tafirnat/deutschWorts@main/importModuls_v1.0.0.js"
 
 try {
   reorganizer()
