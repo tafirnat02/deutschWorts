@@ -53,9 +53,9 @@ const getDoc = async () => {
           `${msgTxt}(m:documents*.js f:docHTML)`,
           err
         );
-
         //localStorage islemleri
-        storage.set("wortList", strt, 1); //yeni local obje icin index atanir,5 saatten kisa olanlar dikkate alinir
+        storage.set("wortListIndex", strt, 1); //yeni local obje icin index atanir,5 saatten kisa olanlar dikkate alinir
+        storage.newKey("wortListIndex","control",true)
         if(strt==0)callNext =finish //daha ilk kelime sorgusunda eger hata alinir ise... dogrudan finish yürütülür....
         finishDoc(HTMLdocuments); //hataya kadar alinan ögeler isleme alinir....
       });

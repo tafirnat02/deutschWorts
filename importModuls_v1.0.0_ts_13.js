@@ -1,9 +1,9 @@
 import { runApp } from "./module/creatWortObj_ts01.js";
-import { getDoc } from "./module/documents_ts02.js";
+import { getDoc } from "./module/documents_ts03.js";
 import { getWortObject } from "./module/getWortObj_ts01.js";
 import { getImg } from "./module/image_ts02.js";
 import { getLang } from "./module/lang_ts10.js";
-import { baseFun } from "./module/main_ts01.js";
+import { baseFun } from "./module/main_ts02.js";
 
 async function loadBase() {
   return new Promise((resolve, reject) => {
@@ -23,16 +23,19 @@ const reorganizer = clear =>{
     window.reorganizer=reorganizer
     if(clear)console.clear()
     let exList=false;
-    let lastWortIndexObj= storage.get("wortList");
+    let lastWortIndexObj= storage.get("wortListIndex");
     let lastWortListObj =storage.get("lastWortList");
     if(lastWortIndexObj && lastWortListObj){
-     let lastIndexNo= lastWortIndexObj.value;
-     let lastWortList= lastWortListObj.value;
-     let subList = lastWortList.slice(lastIndexNo,lastWortList.length).join();
-     exList = confirm(`Son sorguda islem yapilamamis kelimeler tespit edildi!\nEski kelimelerden devam edilsin mi?\n\n${subList}`);
-     exList=exList?subList:false;
+     if(!lastWortIndexObj.control){
+      let lastIndexNo= lastWortIndexObj.value;
+      let lastWortList= lastWortListObj.value;
+      let subList = lastWortList.slice(lastIndexNo,lastWortList.length).join();
+      exList = confirm(`Son sorguda islem yapilamamis kelimeler tespit edildi!\nEski kelimelerden devam edilsin mi?\n\n${subList}`);
+      exList=exList?subList:false;
+     }else{
+      storage.newKey(wortListIndex,"control",false)
+     }
     } 
-    
     if(exList){
       abfrage.neu = exList
     }else{
@@ -122,7 +125,7 @@ async function get_langTR() {
 }
 
 async function finish() {
-  callNext =()=>{}
+  callNext =()=>{};//bos fonksiyon atanir
   storage.set("lastWortList", worteList, 3);
   console.clear();
   msg.allPrint();

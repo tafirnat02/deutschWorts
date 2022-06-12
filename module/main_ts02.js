@@ -158,6 +158,13 @@ function setItems() {
         new Date().setTime(new Date().getTime() + hour * 60 * 60 * 1000) // saat >>
       );
     },
+    newKey:function(name,nKey,nVal){
+      let cloneLocalObj =  this.get(name)
+      if(!!localObj) return
+      cloneLocalObj[nKey]=nVal;
+      this.remove(name);
+      window.localStorage.setItem(name, JSON.stringify(cloneLocalObj));
+    }
   };
   //uygulama icerisinde yürütülen sürecin olup olmadigini kontrolü ve beklemesi icin
   const byController = {};
