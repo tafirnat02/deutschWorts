@@ -1,6 +1,11 @@
 
 version 1.0.0 : 08/06/2022
 
+//server status 429
+    bu durumda app tekrar yüklendikten sonra eger storage öncelikle bakmali var mi bir index
+    varsa buradan kelime almadan son yapilan wort liste üzerinden devam etmeli
+    yoksa normal sekilde wort almak icin beklemesi gerek....
+
 ceviri durumuna bakilacak
     -sonraki key kontrolü yapilmali, geciste problem var
     -düzeltilmeli: eger key limiti olsa dahi eger kelimede zaten tr varsa bunun icin hata bildirimi yapiyor.

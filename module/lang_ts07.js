@@ -3,18 +3,26 @@
 export { getLang };
 
 /*-------- Modul icerigindeki Ögeler ---------*/
-var gapiAllLimit, index, len;
+var gapiAllLimit, index, len, key;
 //wortObjArr'da tutulan wortObj de TRlang kontrol edilir. Bos ise gapi den cevirisi alinmak üzere diger functionlara yönlendirilir
 
 const isEmptyLang = async() => {
-if (wortObjsArr[index].lang_TR != "") {trLang(); return }
+if (wortObjsArr[index].lang_TR != "") return trLang();
 
-if (!gapiAllLimit) {
-  await checkLang(wortObjsArr[index]);
-} else {
-  if (gapiAllLimit) gapiKeyEnd(wortObjsArr[index].wrt.wort); //eger api limitine ulasilmis ise ekrana msg gösterimi yapilir isleme devam edilmez...
-  trLang(); //sonraki kelimelerdeki TR_lang durumunun bildirilmesi icin bu islem tekrarlanir sadece...
-}
+key = await new Promise((resolve) => {resolve(gapiKey()) ;}) 
+  if (!gapiAllLimit) {
+    await checkLang(wortObjsArr[index]);
+  } else {
+    if (gapiAllLimit) gapiKeyEnd(wortObjsArr[index].wrt.wort); //eger api limitine ulasilmis ise ekrana msg gösterimi yapilir isleme devam edilmez...
+    trLang(); //sonraki kelimelerdeki TR_lang durumunun bildirilmesi icin bu islem tekrarlanir sadece...
+  }
+};
+
+//modul erisimi ile wortObjArr dizini uzunlu tespit edilip routerLang ile islem yapilir
+const getLang = () => {
+  index = 0;
+  len = wortObjsArr.length;
+  if (len > index) isEmptyLang();
 };
 
 //wortObjArr dizinindeki tüm ögeler icin routerLang ile islem yapilir
@@ -22,18 +30,12 @@ const trLang = () => {
   runBar.set(10, index, len);
   index++;
   if (index >= len) {
+    //eger key limitine ulasilmis ise key durumu sifirlanir...
+    if(key === false) storage.set("gapiLang",0,12);
     callNext(); //
   } else {
     isEmptyLang(); //sonraki wortObj'deki trLang kontrol edilir
   }
-};
-
-//modul erisimi ile wortObjArr dizini uzunlu tespit edilip routerLang ile islem yapilir
-const getLang = () => {
-  gapiAllLimit = false;
-  index = 0;
-  len = wortObjsArr.length;
-  if (len > index) isEmptyLang();
 };
 
 async function checkLang(wortObj) {
@@ -43,25 +45,13 @@ async function checkLang(wortObj) {
         throw { error };
       })
       .then((response) => {
-        // if (gapiAllLimit)return // eger tüm keyler limite ulasilmis ise gapi islemi ne gecilmez....
-        if (response === true)
-        {
-          trLang(); //basarili sekilde ceviri sonucu alinmis ise sonraki wortObj e gecilir..
-          return
-        } 
-        if (response === "apiLimit") {
-          //api limiti durumunda sonraki api ile islem tekrarlanir
-          let newKeyIndex = storage.get("gapiLang").index + 1; //api key index no siradaki olarak atanir
-          storage.set("gapiLang", newKeyIndex, 12);
-          isEmptyLang(); // ayni kelime icin islem yeni key ile tekrar denenir...
+        if (response === true) return trLang(); //basarili 
+        if(response === "apiLimit"){  //api limiti
+          storage.set("gapiLang", storage.get("gapiLang").value + 1 , 12);//api key index no siradaki olarak atanir
+          isEmptyLang(); // ayni kelime icin islem siradaki key ile tekrar denenir...
         }
-        //farkli bir hata ola durumu kontrol edilebilir, eger yokse yapi icinde!
-        msg.add(
-          2,
-          `Warning | ${wortObj.wrt.wort}`,
-          `"Translate: gapi response!" m:lang*js f:wortObj`,
-          response
-        );
+        //hata dönderilir ise hata firlatilir ve sonrakine gecilir...
+        throw response
       });
   } catch (error) {
     msg.add(
@@ -76,11 +66,6 @@ async function checkLang(wortObj) {
 }
 
 async function gapiTranslate(wortObj) {
- 
-  var key = await  new Promise((resolve) => {resolve(gapiKey()) ;})
-
-  console.log('alinan key:',key)// silinicek---------------
-
   return new Promise((resolve, reject) => {
     /** api islem sonucu basarili iee true, ancak key limiti ise key limit geriye dönderilir**/
     if (!!key) {
@@ -105,27 +90,21 @@ async function gapiTranslate(wortObj) {
       )
         .then((response) => response.json())
         .then((response) => {
-
-          console.log(response)// silinicek---------------
-
-          if (typeof response.message === "string") {
-            //api sorgu limiti
-            resolve("apiLimit");
-          } else {
+          if (typeof response.message === "string") return resolve("apiLimit");
             //basarili sekilde veri alindi
             wortObj.lang_TR =
               response.data["translations"][0].translatedText.replaceAll(
                 /»|⁰|¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹|\(|\)|\n/gi,
                 ""
               ) + " @gApi"; //@gApi ile ceviri olarak eklendigi bildirilir...
-            resolve(true); //ceviri basarili sekilde yapildi...
-          }
+            return resolve(true); //ceviri basarili sekilde yapildi...
+        
         })
         .catch((error) => {
-          reject(error); //hata alinmasi halinde bu reject ile dönderilir...
+          return reject(error); //hata alinmasi halinde bu reject ile dönderilir...
         });
     } else {
-      resolve("apiLimit");
+      return resolve("apiLimit");
     }
   });
 }
@@ -135,8 +114,7 @@ async function gapiKey() {
   .then((result) => {
     let localStorage = result;
     return new Promise((resolve, reject) => {
-      //kullanilacak keyi secer ve geriye dönderi
-      //key test >> https://rapidapi.com/googlecloud/api/google-translate1/
+      //kullanilacak keyi secer ve geriye dönderi   >> key test >> https://rapidapi.com/googlecloud/api/google-translate1/
       const gapi = [
         "7a7b531352msh47e6e582c9a0340p181ba8jsnfd06f4a6b0e3",
         "4169b729a4mshdfbcf80a2cd8e6cp15bd53jsnaf3a9c946fa8",
@@ -159,13 +137,13 @@ async function gapiKey() {
         keyIndex = localStorage.value; /// storage.get("gapiLang").index; //eger storagede tutulan bir deger varsa buradan devam edilir...
         if (keyIndex >= gapi.length) {
           gapiAllLimit = true; //sonraki kelimler icinde limit sebebiyle translate islemi yapilmaz....
-          resolve(false);
+          return resolve(false);
         }
       } else {
         //eger localStorage'de bulunmuyorsa yeni bir obje olusturulur...
         storage.set("gapiLang", keyIndex, 12); //obje kullanim süresi 12 saat olarak ayarlandi...
       }
-      resolve(gapi[keyIndex]); //kullanilmak üzere alinan keyIndex value dönderilir
+      return resolve(gapi[keyIndex]); //kullanilmak üzere alinan keyIndex value dönderilir
     });
     //eger api limitleri dolmus ise bildirimde bulunulur....
   });
