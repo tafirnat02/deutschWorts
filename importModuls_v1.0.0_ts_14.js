@@ -3,7 +3,7 @@ import { getDoc } from "./module/documents_ts03.js";
 import { getWortObject } from "./module/getWortObj_ts01.js";
 import { getImg } from "./module/image_ts02.js";
 import { getLang } from "./module/lang_ts10.js";
-import { baseFun } from "./module/main_ts02.js";
+import { baseFun } from "./module/main_ts03.js";
 
 async function loadBase() {
   return new Promise((resolve, reject) => {

@@ -160,7 +160,7 @@ function setItems() {
     },
     newKey:function(name,nKey,nVal){
       let cloneLocalObj =  this.get(name)
-      if(!!localObj) return
+      if(!!cloneLocalObj) return
       cloneLocalObj[nKey]=nVal;
       this.remove(name);
       window.localStorage.setItem(name, JSON.stringify(cloneLocalObj));
