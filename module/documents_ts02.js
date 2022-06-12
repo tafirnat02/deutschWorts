@@ -56,6 +56,7 @@ const getDoc = async () => {
 
         //localStorage islemleri
         storage.set("wortList", strt, 1); //yeni local obje icin index atanir,5 saatten kisa olanlar dikkate alinir
+        if(strt==0)callNext =finish //daha ilk kelime sorgusunda eger hata alinir ise... dogrudan finish yürütülür....
         finishDoc(HTMLdocuments); //hataya kadar alinan ögeler isleme alinir....
       });
   };

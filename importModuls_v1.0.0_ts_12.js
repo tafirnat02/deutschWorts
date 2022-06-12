@@ -1,5 +1,5 @@
 import { runApp } from "./module/creatWortObj_ts01.js";
-import { getDoc } from "./module/documents_ts01.js";
+import { getDoc } from "./module/documents_ts02.js";
 import { getWortObject } from "./module/getWortObj_ts01.js";
 import { getImg } from "./module/image_ts02.js";
 import { getLang } from "./module/lang_ts10.js";
@@ -22,9 +22,25 @@ async function loadBase() {
 const reorganizer = clear =>{
     window.reorganizer=reorganizer
     if(clear)console.clear()
-    msg.print(0,"Yeni Sorgulama Yap",
-    "\nYeni sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )",
-    ' abfrage.neu = " Tüte "   oder   \n abfrage.neu = " Tüte, Haus, Fenster "')
+    let exList=false;
+    let lastWortIndexObj= storage.get("wortList");
+    let lastWortListObj =storage.get("lastWortList");
+    if(lastWortIndexObj && lastWortListObj){
+     let lastIndexNo= lastWortIndexObj.value;
+     let lastWortList= lastWortListObj.value;
+     let subList = lastWortList.slice(lastIndexNo,lastWortList.length).join();
+     exList = confirm(`Son sorguda islem yapilamamis kelimeler tespit edildi!\nEski kelimelerden devam edilsin mi?\n\n${subList}`);
+     exList=exList?subList:false;
+    } 
+    
+    if(exList){
+      abfrage.neu = exList
+    }else{
+      msg.print(0,"Yeni Sorgulama Yap",
+      "\nYeni sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )",
+      ' abfrage.neu = " Tüte "   oder   \n abfrage.neu = " Tüte, Haus, Fenster "')
+    }
+
 }
 
 async function appStarter() {
@@ -84,6 +100,8 @@ async function controller() {
 }
 
 async function getHTMLdoc() {
+  window.finish=finish //doc ilk ögede hata olur ise...
+
   if (typeof HTMLdocs !== "undefined") HTMLdocs.length = 0; //doc sifirlanir
   callNext= wortObj
   getDoc();
