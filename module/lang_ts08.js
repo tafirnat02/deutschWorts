@@ -32,6 +32,7 @@ const trLang = () => {
   if (index >= len) {
     //eger key limitine ulasilmis ise key durumu sifirlanir...
     if(key === false) storage.set("gapiLang",0,12);
+    gapiAllLimit=false;
     callNext(); //
   } else {
     isEmptyLang(); //sonraki wortObj'deki trLang kontrol edilir
