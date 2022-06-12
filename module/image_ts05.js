@@ -238,10 +238,33 @@ const getImg = async () => {
     }
     imgArr.length = 0;
     api.cse = 0; //aramadaki kelime grubu sifirlanir...
-    if (!!wortObjsArr[index].status.Substantiv[0]) {
+      const getValue=new Promise((resolve)=>{
+        if(typeof wortObjsArr == 'undefined') throw (`wortObjsArr'ye erisilemedi!`)
+        return resolve();
+      })
+      getValue
+      .then( ()=>{
+          if( typeof  o.status == 'undefined' )return ; 
+      }).then(()=>{
+          if( o.status.Substantiv == 'undefined') return ; 
+      }).then(()=>{
+          if(typeof o.status.Substantiv[0] == 'undefined') return ;
+      }).then(()=>{
+        await setObj(wortObjsArr[index]);
+        await searchImg();    
+      }).catch( err=>{
+          console.log(err)
+          throw(`WortObjedeki "${err.message.split("'")[1]}" özellik okunamadi!\n  ${err.name}\n  ${err.message}`)
+      })
+
+
+/*
+    if (!!wortObjsArr[index]) {
+      if(!!wortObjsArr[index].status.Substantiv[0])
       await setObj(wortObjsArr[index]);
       await searchImg();
     }
+    */
     runBar.set(7, index, len);
     index++;
     if (index < len && api.status !== false) {
@@ -254,11 +277,9 @@ const getImg = async () => {
     if(tryagain<4){
       tryagain++;
       index--;
-
-      //(async()=>{
-        await new Promise(resolve => setTimeout(resolve, 420/tryagain))
-        getImg()
-      //} ).call();
+      await new Promise(resolve => setTimeout(resolve, 420/tryagain))
+      getImg()
+  
     }
     msg.add(3, `Error  | image [?]`, 
       `Görsel alinirken hata olustu! (m:_img, f:searchImg)\nwortObjArr.length:${wortObjsArr.length}, index:${index}, len:${len}`, error)
