@@ -249,7 +249,7 @@ const getImg = async () => {
           if( o.status.Substantiv == 'undefined') return ; 
       }).then(()=>{
           if(typeof o.status.Substantiv[0] == 'undefined') return ;
-      }).then(()=>{
+      }).then(async()=>{
         await setObj(wortObjsArr[index]);
         await searchImg();    
       }).catch( err=>{
