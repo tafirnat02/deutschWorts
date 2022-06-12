@@ -244,27 +244,19 @@ const getImg = async () => {
       })
       getValue
       .then( ()=>{
-          if( typeof  o.status == 'undefined' )return ; 
+          if( typeof  wortObjsArr[index].status == 'undefined' )return ; 
       }).then(()=>{
-          if( o.status.Substantiv == 'undefined') return ; 
+          if( wortObjsArr[index].status.Substantiv == 'undefined') return ; 
       }).then(()=>{
-          if(typeof o.status.Substantiv[0] == 'undefined') return ;
+          if(typeof wortObjsArr[index].status.Substantiv[0] == 'undefined') return ;
       }).then(async()=>{
         await setObj(wortObjsArr[index]);
         await searchImg();    
       }).catch( err=>{
           console.log(err)
-          throw(`WortObjedeki "${err.message.split("'")[1]}" özellik okunamadi!\n  ${err.name}\n  ${err.message}`)
+          throw(`WortObje-index:${index} alt özelligi >> "${err.message.split("'")[1]}" okunamadi!\n  ${err.name}\n  ${err.message}`)
       })
 
-
-/*
-    if (!!wortObjsArr[index]) {
-      if(!!wortObjsArr[index].status.Substantiv[0])
-      await setObj(wortObjsArr[index]);
-      await searchImg();
-    }
-    */
     runBar.set(7, index, len);
     index++;
     if (index < len && api.status !== false) {
