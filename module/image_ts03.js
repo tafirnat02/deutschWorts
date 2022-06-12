@@ -10,7 +10,8 @@ export { getImg };
 var imgArr = [],
   url,
   index,
-  len;
+  len,
+  tryagain;
 const api = {
     index: 0,
     cse: 0,
@@ -231,12 +232,12 @@ const getImg = async () => {
     if (len === undefined) {
       len = wortObjsArr.length;
       index = 0;
+      tryagain=0;
     }else{
       index < len
     }
     imgArr.length = 0;
     api.cse = 0; //aramadaki kelime grubu sifirlanir...
-
     if (!!wortObjsArr[index].status.Substantiv[0]) {
       await setObj(wortObjsArr[index]);
       await searchImg();
@@ -250,6 +251,16 @@ const getImg = async () => {
       callNext();
     }
   } catch (error) {
+    if(tryagain<4){
+      tryagain++;
+      index--;
+console.time()
+      (async()=>{await new Promise(resolve => setTimeout(resolve, 420/tryagain))
+            getImg()
+console.timeEnd()
+      }
+      ).call();
+    }
     msg.add(3, `Error  | image [?]`, 
       `Görsel alinirken hata olustu! (m:_img, f:searchImg)\nwortObjArr.length:${wortObjsArr.length}, index:${index}, len:${len}`, error)
   }
