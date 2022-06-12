@@ -9,6 +9,13 @@ var gapiAllLimit, index, len, key;
 const isEmptyLang = async() => {
 if (wortObjsArr[index].lang_TR != "") return trLang();
 
+
+//bu kisim api sisirmemesi icin.... silinecek....
+wortObjsArr[index].lang_TR = "ceviri alindi @gApi"
+return trLang()
+//bu kisim api sisirmemesi icin.... silinecek....
+
+
 key = await new Promise((resolve) => {resolve(gapiKey()) ;}) 
   if (!gapiAllLimit) {
     await checkLang(wortObjsArr[index]);
