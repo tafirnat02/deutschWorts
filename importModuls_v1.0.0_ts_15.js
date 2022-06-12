@@ -39,6 +39,7 @@ const reorganizer = clear =>{
     if(exList){
       abfrage.neu = exList
     }else{
+      if(lastWortIndexObj) storage.remove("wortListIndex");
       msg.print(0,"Yeni Sorgulama Yap",
       "\nYeni sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )",
       ' abfrage.neu = " Tüte "   oder   \n abfrage.neu = " Tüte, Haus, Fenster "')
