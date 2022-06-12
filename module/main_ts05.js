@@ -163,7 +163,7 @@ function setItems() {
       if(!cloneLocalObj) return //aranilan obje lokalde yoksa islemden cikilir
       cloneLocalObj[nKey]=nVal;
       this.remove(name);
-      window.localStorage.setItem(name, JSON.stringify(cloneLocalObj));
+      window.localStorage.setItem(`@ri5: ${name}`, JSON.stringify(cloneLocalObj));
     }
   };
   //uygulama icerisinde yürütülen sürecin olup olmadigini kontrolü ve beklemesi icin
