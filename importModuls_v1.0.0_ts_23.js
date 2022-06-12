@@ -26,14 +26,13 @@ const reorganizer = clear =>{
     let lastWortIndexObj= storage.get("wortListIndex");
     let lastWortListObj =storage.get("lastWortList");
     if(lastWortIndexObj && lastWortListObj){
-     if(!lastWortIndexObj.control){
+     if(lastWortIndexObj.control){
       let lastIndexNo= lastWortIndexObj.value;
       let lastWortList= lastWortListObj.value;
       let subList = lastWortList.slice(lastIndexNo,lastWortList.length).join();
       exList = confirm(`Son sorguda islem yapilamamis kelimeler tespit edildi!\nEski kelimelerden devam edilsin mi?\n\n${subList}`);
       exList=exList?subList:false;
-     }else{
-      storage.newKey(wortListIndex,"control",false)
+      storage.newKey("wortListIndex","control",false)
      }
     } 
     if(exList){
