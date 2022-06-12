@@ -254,12 +254,11 @@ const getImg = async () => {
     if(tryagain<4){
       tryagain++;
       index--;
-console.time()
-      (async()=>{await new Promise(resolve => setTimeout(resolve, 420/tryagain))
-            getImg()
-console.timeEnd()
-      }
-      ).call();
+
+      //(async()=>{
+        await new Promise(resolve => setTimeout(resolve, 420/tryagain))
+        getImg()
+      //} ).call();
     }
     msg.add(3, `Error  | image [?]`, 
       `Görsel alinirken hata olustu! (m:_img, f:searchImg)\nwortObjArr.length:${wortObjsArr.length}, index:${index}, len:${len}`, error)
