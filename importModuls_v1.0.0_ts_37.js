@@ -166,7 +166,7 @@ await loadBase()
     cloneallAlteWort=storage.get("allAlteWorte");
     cloneNueWort=storage.get("neuWorte");
     if(!cloneallAlteWort)cloneallAlteWort={};
-    for( w in wortObjsArr){
+    for( let w in wortObjsArr){
       let exWort=wortObjsArr[w].wrt.wort;
       if(!!cloneallAlteWort[exWort]){
         cloneallAlteWort[exWort][Object.keys(cloneNueWort[exWort])[0]] = Object.values(cloneNueWort[exWort])[0]
