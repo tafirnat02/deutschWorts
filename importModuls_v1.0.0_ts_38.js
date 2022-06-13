@@ -175,7 +175,8 @@ await loadBase()
       }
       delete cloneNueWort[exWort]
     }
-    window.localStorage.setItem("@ri5: allAlteWorte",cloneallAlteWort)
-    window.localStorage.setItem("@ri5: neuWorte",cloneNueWort)
+   
+    window.localStorage.setItem("@ri5: allAlteWorte", JSON.stringify(cloneallAlteWort))
+    window.localStorage.setItem("@ri5: neuWorte", JSON.stringify(cloneNueWort))
     delete byController.local_neuWorte
   }
