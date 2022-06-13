@@ -39,7 +39,7 @@ const reorganizer = clear =>{
     if(!!exList){
       if(lastWortIndexObj) storage.remove("wortListIndex");
       return abfrage.neu = exList ;
-    }else if(!byController.local_neuWorte && localWortObj !== null ){
+    }else if(Object.keys(localWortObj).length>0){
       let localWortArr = [],shortWortList,allLocalList;
       for(let k_ in localWortObj)localWortArr.push(k_)
       localWortArr.sort()
@@ -163,10 +163,10 @@ await loadBase()
   function changeLocalWorte(){
     //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
     let cloneallAlteWort={}
-    cloneallAlteWort=storage.get("allAlteWorte");
-    if(!cloneallAlteWort)cloneallAlteWort={};
-    for( let index in wortObjsArr){
-      let localWrt = Object.keys(localWortObj)[index];
+    cloneallAlteWort=JSON.parse(storage.get("allAlteWorte"));
+    if(!cloneallAlteWort) cloneallAlteWort={};
+    for( let inx in wortObjsArr){
+      let localWrt = Object.keys(localWortObj)[inx];
       if(!!cloneallAlteWort[localWrt]){
        // Kelime tanimla ise alinmayaca veya bos ise...
        let defVal = Object.values(localWortObj[localWrt])[0]
