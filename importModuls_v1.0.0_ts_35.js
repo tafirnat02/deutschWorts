@@ -148,9 +148,10 @@ async function finish() {
     });
     result.then(msg.group());
   });
+  
+  if(!!byController.local_neuWorte) changeLocalWorte.call()
   console.log('\n')
   reorganizer(false)
-  if(!!byController.local_neuWorte) changeLocalWorte.call()
 }
 
 await loadBase()
