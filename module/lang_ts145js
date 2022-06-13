@@ -8,8 +8,9 @@ var gapiAllLimit, index, len, key, userDef;
 
 const isEmptyLang = async () => {
   let crlWrt = wortObjsArr[index].wrt.wort;
-  userDef = !!localWortObj ? Object.values(localWortObj[crlWrt]) : "";
-  userDef = !!userDef[0] ? userDef : "";
+  console.log('islemde> kelime:', crlWrt, ' >index:', index)
+  /*userDef = !!localWortObj ? Object.values(localWortObj[crlWrt]) : "";
+  userDef = !!userDef[0] ? userDef : "";*/
   userDef =
     !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5` : "";
 
@@ -35,6 +36,8 @@ const isEmptyLang = async () => {
 
 //modul erisimi ile wortObjArr dizini uzunlu tespit edilip routerLang ile islem yapilir
 const getLang = () => {
+  console.log('localWortObj objesi',localWortObj)
+  console.log('wortObjsArr objesi',wortObjsArr)
   index = 0;
   len = wortObjsArr.length;
   if (len > index) isEmptyLang();
