@@ -136,6 +136,7 @@ async function get_langTR() {
 
 async function finish() {
   callNext =()=>{};//bos fonksiyon atanir
+  if(!!localWortObj) changeLocalWorte.call();
   storage.set("lastWortList", worteList, 3);
   console.clear();
   msg.allPrint();
@@ -150,7 +151,6 @@ async function finish() {
   });
   console.log('\n')
   reorganizer(false)
-  if(!!localWortObj) changeLocalWorte.call()
 }
 
 await loadBase()
