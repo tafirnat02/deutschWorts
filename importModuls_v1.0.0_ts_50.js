@@ -162,8 +162,7 @@ await loadBase()
 
   function changeLocalWorte(){
     //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-    let cloneallAlteWort={}
-    cloneallAlteWort=JSON.parse(storage.get("allAlteWorte"));
+    let cloneallAlteWort=JSON.parse(storage.get("allAlteWorte"));
     if(!cloneallAlteWort) cloneallAlteWort={};
     for( let inx in wortObjsArr){
       let localWrt = Object.keys(localWortObj)[inx];
