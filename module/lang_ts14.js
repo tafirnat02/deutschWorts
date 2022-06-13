@@ -6,21 +6,25 @@ export { getLang };
 var gapiAllLimit, index, len, key, userDef;
 //wortObjArr'da tutulan wortObj de TRlang kontrol edilir. Bos ise gapi den cevirisi alinmak üzere diger functionlara yönlendirilir
 
-const isEmptyLang = async() => {
-  userDef= !!localWortObj?Object.values(localWortObj[wortObjsArr[index].wrt.wort])[0]:"";
-  userDef = !!userDef && userDef != "Kelimeyi tanimla..."? ` 💭 ${userDef} @ri5`:"";
+const isEmptyLang = async () => {
+  let crlWrt = wortObjsArr[index].wrt.wort;
+  userDef = !!localWortObj ? Object.values(localWortObj[crlWrt]) : "";
+  userDef = !!userDef[0] ? userDef : "";
+  userDef =
+    !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5` : "";
 
-if (wortObjsArr[index].lang_TR != "") {
-  wortObjsArr[index].lang_TR +=  userDef
+  if (wortObjsArr[index].lang_TR != "") {
+    wortObjsArr[index].lang_TR += userDef;
+    return trLang();
+  }
+  //bu kisim api sisirmemesi icin.... silinecek....
+  wortObjsArr[index].lang_TR = "ceviri alindi @gApi" + userDef;
   return trLang();
-}
-//bu kisim api sisirmemesi icin.... silinecek....
-wortObjsArr[index].lang_TR = "ceviri alindi @gApi" + userDef
-return trLang()
-//bu kisim api sisirmemesi icin.... silinecek....
+  //bu kisim api sisirmemesi icin.... silinecek....
 
-
-key = await new Promise((resolve) => {resolve(gapiKey()) ;}) 
+  key = await new Promise((resolve) => {
+    resolve(gapiKey());
+  });
   if (!gapiAllLimit) {
     await checkLang(wortObjsArr[index]);
   } else {
@@ -42,8 +46,8 @@ const trLang = () => {
   index++;
   if (index >= len) {
     //eger key limitine ulasilmis ise key durumu sifirlanir...
-    if(key === false) storage.set("gapiLang",0,12);
-    gapiAllLimit=false;
+    if (key === false) storage.set("gapiLang", 0, 12);
+    gapiAllLimit = false;
     callNext(); //
   } else {
     isEmptyLang(); //sonraki wortObj'deki trLang kontrol edilir
@@ -57,13 +61,14 @@ async function checkLang(wortObj) {
         throw { error };
       })
       .then((response) => {
-        if (response === true) return trLang(); //basarili 
-        if(response === "apiLimit"){  //api limiti
-          storage.set("gapiLang", storage.get("gapiLang").value + 1 , 12);//api key index no siradaki olarak atanir
+        if (response === true) return trLang(); //basarili
+        if (response === "apiLimit") {
+          //api limiti
+          storage.set("gapiLang", storage.get("gapiLang").value + 1, 12); //api key index no siradaki olarak atanir
           isEmptyLang(); // ayni kelime icin islem siradaki key ile tekrar denenir...
         }
         //hata dönderilir ise hata firlatilir ve sonrakine gecilir...
-        throw response
+        throw response;
       });
   } catch (error) {
     msg.add(
@@ -73,7 +78,7 @@ async function checkLang(wortObj) {
       error
     );
     //isleme devam edilmesi icin sonraki kelimeye gecilir...
-    trLang()
+    trLang();
   }
 }
 
@@ -103,14 +108,15 @@ async function gapiTranslate(wortObj) {
         .then((response) => response.json())
         .then((response) => {
           if (typeof response.message === "string") return resolve("apiLimit");
-            //basarili sekilde veri alindi
-            wortObj.lang_TR =
-              response.data["translations"][0].translatedText.replaceAll(
-                /»|⁰|¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹|\(|\)|\n/gi,
-                ""
-              ) + " @gApi" + userDef; //@gApi ile ceviri olarak eklendigi bildirilir...
-            return resolve(true); //ceviri basarili sekilde yapildi...
-        
+          //basarili sekilde veri alindi
+          wortObj.lang_TR =
+            response.data["translations"][0].translatedText.replaceAll(
+              /»|⁰|¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹|\(|\)|\n/gi,
+              ""
+            ) +
+            " @gApi" +
+            userDef; //@gApi ile ceviri olarak eklendigi bildirilir...
+          return resolve(true); //ceviri basarili sekilde yapildi...
         })
         .catch((error) => {
           return reject(error); //hata alinmasi halinde bu reject ile dönderilir...
@@ -122,8 +128,7 @@ async function gapiTranslate(wortObj) {
 }
 
 async function gapiKey() {
-  return await checkStorage()
-  .then((result) => {
+  return await checkStorage().then((result) => {
     let localStorage = result;
     return new Promise((resolve, reject) => {
       //kullanilacak keyi secer ve geriye dönderi   >> key test >> https://rapidapi.com/googlecloud/api/google-translate1/
