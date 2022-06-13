@@ -3,15 +3,19 @@
 export { getLang };
 
 /*-------- Modul icerigindeki Ögeler ---------*/
-var gapiAllLimit, index, len, key;
+var gapiAllLimit, index, len, key, userDef;
 //wortObjArr'da tutulan wortObj de TRlang kontrol edilir. Bos ise gapi den cevirisi alinmak üzere diger functionlara yönlendirilir
 
 const isEmptyLang = async() => {
-if (wortObjsArr[index].lang_TR != "") return trLang();
+  userDef= !!localWortObj?Object.values(localWortObj[wortObjsArr[index].wrt.wort])[0]:"";
+  userDef = !!userDef && userDef != "Kelimeyi tanimla..."? ` 💭 ${userDef} @ri5`:"";
 
-
+if (wortObjsArr[index].lang_TR != "") {
+  ortObjsArr[index].lang_TR +=  userDef
+  return trLang();
+}
 //bu kisim api sisirmemesi icin.... silinecek....
-wortObjsArr[index].lang_TR = "ceviri alindi @gApi"
+wortObjsArr[index].lang_TR = "ceviri alindi @gApi" + userDef
 return trLang()
 //bu kisim api sisirmemesi icin.... silinecek....
 
@@ -104,7 +108,7 @@ async function gapiTranslate(wortObj) {
               response.data["translations"][0].translatedText.replaceAll(
                 /»|⁰|¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹|\(|\)|\n/gi,
                 ""
-              ) + " @gApi"; //@gApi ile ceviri olarak eklendigi bildirilir...
+              ) + " @gApi" + userDef; //@gApi ile ceviri olarak eklendigi bildirilir...
             return resolve(true); //ceviri basarili sekilde yapildi...
         
         })

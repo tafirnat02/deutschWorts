@@ -2,7 +2,7 @@ import { runApp } from "./module/creatWortObj_ts01.js";
 import { getDoc } from "./module/documents_ts03.js";
 import { getWortObject } from "./module/getWortObj_ts01.js";
 import { getImg } from "./module/image_ts08.js";
-import { getLang } from "./module/lang_ts10.js";
+import { getLang } from "./module/lang_ts12.js";
 import { baseFun } from "./module/main_ts08.js";
 
 async function loadBase() {
@@ -47,7 +47,7 @@ const reorganizer = clear =>{
       let localWort = confirm(`🪃 Sayfada yakalanan kelimeler bulunmakta. 🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌Kelimeler: ${shortWortList}`)
       if(!!localWort)
       {
-        byController['local_neuWorte']=true //finishte alinan kelimeler 'allAlteWorte' tasinmasi icin kontrol edilir...
+        window.localWortObj=localWortObj
         return abfrage.neu = allLocalList ;
       }
     }
@@ -150,7 +150,7 @@ async function finish() {
   });
   console.log('\n')
   reorganizer(false)
-  if(!!byController.local_neuWorte) changeLocalWorte.call()
+  if(!!localWortObj) changeLocalWorte.call()
 }
 
 await loadBase()
@@ -162,22 +162,25 @@ await loadBase()
 
   function changeLocalWorte(){
     //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-    let localNeuNo={},cloneNueWort={},cloneallAlteWort={}
+    let cloneallAlteWort={}
     cloneallAlteWort=storage.get("allAlteWorte");
-    cloneNueWort=storage.get("neuWorte");
     if(!cloneallAlteWort)cloneallAlteWort={};
     for( let w in wortObjsArr){
+      console.log('w:',w)
       let exWort=wortObjsArr[w].wrt.wort;
       if(!!cloneallAlteWort[exWort]){
-        cloneallAlteWort[exWort][Object.keys(cloneNueWort[exWort])[0]] = Object.values(cloneNueWort[exWort])[0]
-        delete cloneNueWort[exWort]
+       // Kelime tanimla ise alinmayaca veya bos ise...
+       let defVal = Object.values(localWortObj[exWort])[0]
+       defVal = defVal=="Kelimeyi tanimla..." || !defVal ? false:defVal;
+       if(defVal) cloneallAlteWort[exWort][Object.keys(localWortObj[exWort])[0]] = defVal;
       }else{
-        cloneallAlteWort[exWort]=cloneNueWort[exWort]
-        delete cloneNueWort[exWort]
+        cloneallAlteWort[exWort]=localWortObj[exWort]
       }
+      console.log('exWort',exWort, 'obj:', localWortObj,'localWortObj[..]:', localWortObj[exWort])
+      delete localWortObj[exWort]
     }
    
     window.localStorage.setItem("@ri5: allAlteWorte", JSON.stringify(cloneallAlteWort))
-    window.localStorage.setItem("@ri5: neuWorte", JSON.stringify(cloneNueWort))
-    delete byController.local_neuWorte
+    window.localStorage.setItem("@ri5: neuWorte", JSON.stringify(localWortObj))
+    localWortObj=null
   }
