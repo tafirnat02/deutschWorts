@@ -47,7 +47,7 @@ const reorganizer = clear =>{
       let localWort = confirm(`🪃 Sayfada yakalanan kelimeler bulunmakta. 🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌Kelimeler: ${shortWortList}`)
       if(!!localWort)
       {
-        byController['local_neuWorte'] //finishte alinan kelimeler 'allAlteWorte' tasinmasi icin kontrol edilir...
+        byController['local_neuWorte']=true //finishte alinan kelimeler 'allAlteWorte' tasinmasi icin kontrol edilir...
         return abfrage.neu = allLocalList ;
       }
     }
@@ -148,10 +148,9 @@ async function finish() {
     });
     result.then(msg.group());
   });
-  
-  if(!!byController.local_neuWorte) changeLocalWorte.call()
   console.log('\n')
   reorganizer(false)
+  if(!!byController.local_neuWorte) changeLocalWorte.call()
 }
 
 await loadBase()
@@ -178,6 +177,5 @@ await loadBase()
     }
     window.localStorage.setItem("@ri5: allAlteWorte",cloneallAlteWort)
     window.localStorage.setItem("@ri5: neuWorte",cloneNueWort)
-    setTimeout(() => {delete byController.local_neuWorte}, 2000);
-    
+    delete byController.local_neuWorte
   }
