@@ -145,6 +145,7 @@ function setItems() {
     get: function (name) {
       let localObj = JSON.parse(window.localStorage.getItem(`@ri5: ${name}`));
       if (!localObj) return false;
+      if(name == 'neuWorte') return localObj;
       if (new Date(localObj.date) > new Date()) return localObj; // key ve tarih gecerli ise geriye obje dönderilir...
       this.remove(name); //tarih güncel olmadiginda lokaldeki obje kaldrilir.
       return false;
