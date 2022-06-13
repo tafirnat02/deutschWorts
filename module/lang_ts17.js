@@ -7,12 +7,9 @@ var gapiAllLimit, index, len, key, userDef;
 //wortObjArr'da tutulan wortObj de TRlang kontrol edilir. Bos ise gapi den cevirisi alinmak üzere diger functionlara yönlendirilir
 
 const isEmptyLang = async () => {
-  let crlWrt = wortObjsArr[index].wrt.wort;
-  console.log('islemde> kelime:', crlWrt, ' >index:', index)
-  /*userDef = !!localWortObj ? Object.values(localWortObj[crlWrt]) : "";
-  userDef = !!userDef[0] ? userDef : "";*/
-  userDef =
-    !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5` : "";
+  let localWrt = Object.keys(localWortObj)[index];
+  userDef = !!localWortObj ? Object.values(localWortObj[localWrt])[0] : "";
+  userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5` : "";
 
   if (wortObjsArr[index].lang_TR != "") {
     wortObjsArr[index].lang_TR += userDef;
@@ -36,8 +33,6 @@ const isEmptyLang = async () => {
 
 //modul erisimi ile wortObjArr dizini uzunlu tespit edilip routerLang ile islem yapilir
 const getLang = () => {
-  console.log('localWortObj objesi',localWortObj)
-  console.log('wortObjsArr objesi',wortObjsArr)
   index = 0;
   len = wortObjsArr.length;
   if (len > index) isEmptyLang();
