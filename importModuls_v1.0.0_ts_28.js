@@ -3,7 +3,7 @@ import { getDoc } from "./module/documents_ts03.js";
 import { getWortObject } from "./module/getWortObj_ts01.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts10.js";
-import { baseFun } from "./module/main_ts05.js";
+import { baseFun } from "./module/main_ts06.js";
 
 async function loadBase() {
   return new Promise((resolve, reject) => {
@@ -29,15 +29,15 @@ const reorganizer = clear =>{
      if(!lastWortIndexObj.control){
       let lastIndexNo= lastWortIndexObj.value;
       let lastWortList= lastWortListObj.value;
-      let subList = lastWortList.slice(lastIndexNo,lastWortList.length).join(" ");
-      exList = confirm(`Son sorguda islem yapilamamis kelimeler tespit edildi!\nEski kelimelerden devam edilsin mi?\n\nKelime listesi: ${subList}`);
+      let subList = lastWortList.slice(lastIndexNo,lastWortList.length).join(", ");
+      exList = confirm(`🛸Son sorguda islem yapilamamis kelimeler tespit edildi!\n📋Eski kelimelerden devam edilsin mi?\n\n🔖Kelime listesi: ${subList}`);
       exList=exList?subList:false;
      }
      storage.newKey("wortListIndex","control",false)
     } 
     if(!!exList){
       if(lastWortIndexObj) storage.remove("wortListIndex");
-      abfrage.neu = `${exList}` 
+      abfrage.neu = exList ;
     }else{
       msg.print(0,"Yeni Sorgulama Yap",
       "\nYeni sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )",

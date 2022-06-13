@@ -174,7 +174,7 @@ function setItems() {
       if (key !== "neu") return; //sadece obje icin "neu" anahtari erisimine izin verilir
       if (value === "cleanObject") {
         for (const k in abfrageObj) delete abfrageObj[k]; //value eger "cleanObject" ise abfrageObj'deki tüm propertyler silinir
-        return;
+        return true;
       }
      /* if (abfrageObj.neu === value) return; //degisiklik kontrol edilir
       if (value === "wiederholen") value = abfrageObj.neu  //son kelime grubuyla tekrar islem yapmak sitenilirse...*/
