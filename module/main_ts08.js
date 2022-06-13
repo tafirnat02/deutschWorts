@@ -145,7 +145,7 @@ function setItems() {
     get: function (name) {
       let localObj = JSON.parse(window.localStorage.getItem(`@ri5: ${name}`));
       if (!localObj) return false;
-      if(name == 'neuWorte') return localObj;
+      if(name == 'neuWorte' || name == 'allAlteWorte') return localObj;
       if (new Date(localObj.date) > new Date()) return localObj; // key ve tarih gecerli ise geriye obje dönderilir...
       this.remove(name); //tarih güncel olmadiginda lokaldeki obje kaldrilir.
       return false;
@@ -159,11 +159,15 @@ function setItems() {
         new Date().setTime(new Date().getTime() + hour * 60 * 60 * 1000) // saat >>
       );
     },
-    newKey:function(name,nKey,nVal){
+    newKey:function(name,nKey,nVal,subKey=false){
       let cloneLocalObj =  this.get(name)
       if(!cloneLocalObj) return //aranilan obje lokalde yoksa islemden cikilir
-      cloneLocalObj[nKey]=nVal;
-      this.remove(name);
+      if(!!subKey){//obje hild key (yoksa atar) icin yeni key ve value grisi yapar
+        if(!cloneLocalObj[subKey]) cloneLocalObj[subKey]={}
+            cloneLocalObj[subKey][nKey]=nVal
+      }else{
+         cloneLocalObj[nKey]=nVal; 
+      }
       window.localStorage.setItem(`@ri5: ${name}`, JSON.stringify(cloneLocalObj));
     }
   };
