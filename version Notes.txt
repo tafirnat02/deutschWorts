@@ -1,12 +1,6 @@
 
 version 1.0.0 : 08/06/2022
 
-//server status 429
-    bu durumda app tekrar yüklendikten sonra eger storage öncelikle bakmali var mi bir index
-    varsa buradan kelime almadan son yapilan wort liste üzerinden devam etmeli
-    yoksa normal sekilde wort almak icin beklemesi gerek....
-
-ceviri durumuna bakilacak
-    -sonraki key kontrolü yapilmali, geciste problem var
-    -düzeltilmeli: eger key limiti olsa dahi eger kelimede zaten tr varsa bunun icin hata bildirimi yapiyor.
-    kelime tr karsiligi öncelikle yapilmali eger bos ise ancak o halde ceviri isleme alinmali...
+> uygulama ile locale gönderilen kelimeler 
+    eger kelime varsa abfrage.neu ile isleme alinmalidaha sonra bu kelimeler 
+    allAltenWorte olarak ayri sekilde tutulmali.---olaki bir hata vs oldu oradan mudahale etmek icin vs....+
