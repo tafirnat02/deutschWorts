@@ -41,7 +41,7 @@ const reorganizer = clear =>{
       return abfrage.neu = exList ;
     }else if(localWortObj !== null ){
       let localWortArr = [],shortWortList,allLocalList;
-      for(key in localWortObj){localWortArr.push(key)}
+      for(let k_ in localWortObj)localWortArr.push(k_)
       allLocalList=localWortArr.join(",")
       shortWortList=localWortArr.slice(0,10).join(',') + (localWortArr.length>10?'...':'')
       let localWort = confirm(`🪃 Sayfada yakalanan kelimeler bulunmakta.\n🧭 Bu kelime listesi icin islem yapilsin mi?\📌Kelimeler:${shortWortList}`)
