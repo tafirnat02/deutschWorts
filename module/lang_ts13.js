@@ -11,7 +11,7 @@ const isEmptyLang = async() => {
   userDef = !!userDef && userDef != "Kelimeyi tanimla..."? ` 💭 ${userDef} @ri5`:"";
 
 if (wortObjsArr[index].lang_TR != "") {
-  ortObjsArr[index].lang_TR +=  userDef
+  wortObjsArr[index].lang_TR +=  userDef
   return trLang();
 }
 //bu kisim api sisirmemesi icin.... silinecek....
