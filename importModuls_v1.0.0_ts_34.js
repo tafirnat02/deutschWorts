@@ -39,12 +39,12 @@ const reorganizer = clear =>{
     if(!!exList){
       if(lastWortIndexObj) storage.remove("wortListIndex");
       return abfrage.neu = exList ;
-    }else if(localWortObj !== null ){
+    }else if(!byController.local_neuWorte && localWortObj !== null ){
       let localWortArr = [],shortWortList,allLocalList;
       for(let k_ in localWortObj)localWortArr.push(k_)
       allLocalList=localWortArr.join(",")
-      shortWortList=localWortArr.slice(0,10).join(', ') + (localWortArr.length>10?'...':'')
-      let localWort = confirm(`🪃 Sayfada yakalanan kelimeler bulunmakta. 🧭 Bu kelime listesi icin islem yapilsin mi?\n📌Kelimeler:${shortWortList}`)
+      shortWortList=localWortArr.slice(0,12).join(', ') + (localWortArr.length>12?'...':'')
+      let localWort = confirm(`🪃 Sayfada yakalanan kelimeler bulunmakta. 🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌Kelimeler: ${shortWortList}`)
       if(!!localWort)
       {
         byController['local_neuWorte'] //finishte alinan kelimeler 'allAlteWorte' tasinmasi icin kontrol edilir...
@@ -165,6 +165,7 @@ await loadBase()
     let localNeuNo={},cloneNueWort={},cloneallAlteWort={}
     cloneallAlteWort=storage.get("allAlteWorte");
     cloneNueWort=storage.get("neuWorte");
+    if(!cloneallAlteWort)cloneallAlteWort={};
     for( w in wortObjsArr){
       let exWort=wortObjsArr[w].wrt.wort;
       if(!!cloneallAlteWort[exWort]){
@@ -175,6 +176,7 @@ await loadBase()
       delete cloneNueWort[exWort]
     }
     window.localStorage.setItem("@ri5: allAlteWorte",cloneallAlteWort)
-    window.localStorage.setItem("@ri5: neuWorte",cloneallAlteWort)
-    delete byController.local_neuWorte
+    window.localStorage.setItem("@ri5: neuWorte",cloneNueWort)
+    setTimeout(() => {delete byController.local_neuWorte}, 2000);
+    
   }
