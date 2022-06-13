@@ -170,10 +170,11 @@ await loadBase()
       let exWort=wortObjsArr[w].wrt.wort;
       if(!!cloneallAlteWort[exWort]){
         cloneallAlteWort[exWort][Object.keys(cloneNueWort[exWort])[0]] = Object.values(cloneNueWort[exWort])[0]
+        delete cloneNueWort[exWort]
       }else{
         cloneallAlteWort[exWort]=cloneNueWort[exWort]
+        delete cloneNueWort[exWort]
       }
-      delete cloneNueWort[exWort]
     }
    
     window.localStorage.setItem("@ri5: allAlteWorte", JSON.stringify(cloneallAlteWort))
