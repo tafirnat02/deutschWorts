@@ -42,9 +42,7 @@ const api = {
         this.eF();
         this.dF();
       } catch (error) {
-        console.log('hata olustu...')
         for( let key in wObj)console.log(key, wObj[key])
-        console.log(error)
         let posText = 'Görsel alinirken hata meydana geldi! (m:img_, o:qW.run())'
         try {
           msg.add(3,wObj.wrt.wort,posText, error)
@@ -253,7 +251,6 @@ const getImg = async () => {
         await setObj(wortObjsArr[index]);
         await searchImg();    
       }).catch( err=>{
-          console.log(err)
           throw(`WortObje-index:${index} alt özelligi >> "${err.message.split("'")[1]}" okunamadi!\n  ${err.name}\n  ${err.message}`)
       })
 
