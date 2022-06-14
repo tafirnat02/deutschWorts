@@ -33,6 +33,9 @@ const docs = async (callback) => {
 const getWortObject = async (callback) => {
   const wortObjsArr = [];
   window.wortObjsArr = wortObjsArr;
+
+  console.log('doc icin isleme alinan kelime lstesi', wortObjsArr)
+
   wortObjsArr.length=0
   len = HTMLdocs.length;
   index=0;

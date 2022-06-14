@@ -85,8 +85,7 @@ var doc, //alinan sayfa document'i
   wort,
   ele,
   verb,
-  head,
-  search_Wort; //islem gören kelime
+  head; //islem gören kelime
 
 /*--- [1.Kisim: gelen documentden kelime kontrolü ve ilgili fonksiyona yönlendirme] ---*/
 
@@ -162,11 +161,11 @@ async function getObject(dcmnt) {
 
 function checkWort(dcmnt) {
   return new Promise((resolve) => {
-    search_Wort="";
-    wort = dcmnt.querySelector("form>div>input").value;
-    doc = dcmnt;
-    search_Wort = dcmnt.URL.split("/?w=")[1] 
-    if (!checkEl(dcmnt.querySelector("section.rBox"))) {
+    let search_Wort=dcmnt[0];
+    wort = dcmnt[1].querySelector("form>div>input").value;
+    doc = dcmnt[1];
+   
+    if (!checkEl(doc.querySelector("section.rBox"))) {
       byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
       throw `Das Wort "${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}`;
     }
@@ -176,15 +175,15 @@ function checkWort(dcmnt) {
       return resolve();
     }
 
-    console.log("search_Wort ve doc.wort", search_Wort, wort)
-  
+    worteList 
+
     let userDef = Object.values(localWortObj[search_Wort])[0];
-    userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5 | `:"";
+    userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? `💭 ${userDef} @ri5`:"";
     if (wortObjsArr.length<1){
       let addPar ={}
       addPar[search_Wort]=false;
       byController.addSearchParams=[addPar,userDef]
-      msg.add(0,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
+      msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
     }else{
      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
       for( let i in wortObjsArr){
@@ -193,7 +192,7 @@ console.log('eslesme sonucu bulundu >> ', wort, search_Wort)
         wortObjsArr[i].searchParams[search_Wort]=false
         if(!!userDef)  wortObjsArr[i].lang_TR += userDef
         byController.ahnelnWort = true; //bu obje wortObjsArr eklenmemesi icin
-        msg.add(0,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
+        msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
         throw 'nextWort'
       } 
     }

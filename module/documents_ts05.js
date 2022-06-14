@@ -12,12 +12,6 @@ const getDoc = async () => {
 
   const HTMLdocuments = [],
     subWorteList = [...worteList.slice(strt)];
-
-
-console.log('isleme alinan kelime listesi', subWorteList)
-
-
-
   const nextDoc = () => {
     if (subWorteList.length > 0) docHTML(subWorteList.shift());
   };
@@ -32,7 +26,7 @@ console.log('isleme alinan kelime listesi', subWorteList)
       .then((html) => {
         let parser = new DOMParser();
         let doc = parser.parseFromString(html, "text/html");
-        HTMLdocuments.push(doc);
+        HTMLdocuments.push([wort,doc]);
       })
       .then(() => {
         strt++;
@@ -76,8 +70,5 @@ const finishDoc = (docsVal) => {
   } else {
     HTMLdocs = docsVal;
   }
-  console.log('tüm alinan doclar:', HTMLdocs)
-  debugger
   callNext()
- // byController.docs = true;
 };
