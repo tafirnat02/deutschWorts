@@ -161,6 +161,14 @@ await loadBase()
   });
 
   function changeLocalWorte(){
+/**
+ * 
+ * Bu kismda localdeki wprt listesilinirken bazi kelimeler atlanmakta! silinmemekete
+ * bu hata düzeltilecej...
+ * 
+ */
+
+
     //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
     let cloneallAlteWort=storage.get("allAlteWorte");
     if(!cloneallAlteWort) cloneallAlteWort={};
@@ -175,8 +183,10 @@ await loadBase()
         cloneallAlteWort[localWrt]=localWortObj[localWrt]
       }
       delete localWortObj[localWrt]
+      console.log(`${localWrt} silindikten sonra localWortObj`, localWortObj)
     }
     window.localStorage.setItem("@ri5: allAlteWorte", JSON.stringify(cloneallAlteWort))
     window.localStorage.setItem("@ri5: neuWorte", JSON.stringify(localWortObj))
     localWortObj=null
+    console.log('msg.container: ',msg.container)
   }
