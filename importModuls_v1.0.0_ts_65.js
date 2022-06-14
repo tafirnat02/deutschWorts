@@ -49,7 +49,11 @@ const reorganizer = clear =>{
       if(!!localWort){
         app_pano.set("localWorte");
         window.localWortObj=localWortObj;
-        return abfrage.neu = allLocalList; //bu kelimeler "worteList" olarak globale aktarilir sonraki functionlarla...
+        try {
+          return abfrage.neu = allLocalList; //bu kelimeler "worteList" olarak globale aktarilir sonraki functionlarla...
+        } catch (error) {
+          if(error.message.search('falsish')<0) msg.add(3,'Hata olustu! m:importModuls, f:reorganizer', error) 
+        }
       }
     }
       msg.print(0,"Yeni Sorgulama Yap",
