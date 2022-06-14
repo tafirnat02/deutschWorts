@@ -1,4 +1,4 @@
-import { runApp } from "./module/creatWortObj_ts01.js";
+import { runApp } from "./module/creatWortObj_ts02.js";
 import { getDoc } from "./module/documents_ts03.js";
 import { getWortObject } from "./module/getWortObj_ts01.js";
 import { getImg } from "./module/image_ts08.js";
@@ -46,10 +46,10 @@ const reorganizer = clear =>{
       allLocalList=localWortArr.join(",")
       shortWortList=localWortArr.slice(0,12).join(', ') + (localWortArr.length>12?'...':'')
       let localWort = confirm(`🪃 Sayfada yakalanan kelimeler bulunmakta. 🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌Kelimeler: ${shortWortList}`)
-      if(!!localWort)
-      {
-        window.localWortObj=localWortObj
-        return abfrage.neu = allLocalList ;
+      if(!!localWort){
+        byController.localWorte=true;
+        window.localWortObj=localWortObj;
+        return abfrage.neu = allLocalList;
       }
     }
       msg.print(0,"Yeni Sorgulama Yap",
@@ -137,7 +137,8 @@ async function get_langTR() {
 
 async function finish() {
   callNext =()=>{};//bos fonksiyon atanir
-  if(!!localWortObj) changeLocalWorte.call();
+  if(byController.localWorte) changeLocalWorte.call();
+  delete byController.localWorte
   storage.set("lastWortList", worteList, 3);
   console.clear();
   msg.allPrint();
@@ -167,26 +168,48 @@ await loadBase()
  * bu hata düzeltilecej...
  * 
  */
-
-
     //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-    let cloneallAlteWort=storage.get("allAlteWorte");
+    let neuWotreKeys=Object.keys(localWortObj),
+        cloneallAlteWort=storage.get("allAlteWorte");
     if(!cloneallAlteWort) cloneallAlteWort={};
-    for( let inx in wortObjsArr){
-      let localWrt = Object.keys(localWortObj)[inx];
-      if(!!cloneallAlteWort[localWrt]){
-       // Kelime tanimla ise alinmayaca veya bos ise...
-       let defVal = Object.values(localWortObj[localWrt])[0]
-       defVal = defVal=="Kelimeyi tanimla..." || !defVal ? false:defVal;
-       if(defVal) cloneallAlteWort[localWrt][Object.keys(localWortObj[localWrt])[0]] = defVal;
-      }else{
-        cloneallAlteWort[localWrt]=localWortObj[localWrt]
+
+    neuWotreKeys.forEach(srchWort=>{
+      let result=false;
+      for (let i = 0; i < wortObjsArr.length; i++) {
+        if(srchWort == wortObjsArr[i].wrt.wort){
+          result = true;
+        }else{
+          let srchParams = Object.keys(wortObjsArr[i].searchParams)
+          if(srchParams.length>0){
+            for(srchParam in wortObjsArr[i].searchParams){
+             if(srchWort != srchParam || wortObjsArr[i].searchParams[srchParam]) continue;
+              wortObjsArr[i].searchParams[srchWort] = true;
+              result = true;
+              break;
+            }
+         }
+        }
+        if(result) break;
       }
-      delete localWortObj[localWrt]
-      console.log(`${localWrt} silindikten sonra localWortObj`, localWortObj)
-    }
-    window.localStorage.setItem("@ri5: allAlteWorte", JSON.stringify(cloneallAlteWort))
-    window.localStorage.setItem("@ri5: neuWorte", JSON.stringify(localWortObj))
-    localWortObj=null
-    console.log('msg.container: ',msg.container)
+
+       if(result){//neuWortListe'deki kelime archive: cloneallAlteWort'e tasinir
+        if(!!cloneallAlteWort[srchWort]){
+          // Kelime tanimla ise alinmayaca veya bos ise...
+          let subKey= Object.keys(localWortObj[srchWort])[0],
+              subVal= Object.values(localWortObj[srchWort])[0];
+              subVal = subVal=="Kelimeyi tanimla..." || !subVal ? false:subVal;
+          if(subVal) cloneallAlteWort[srchWort][subKey] = subVal;
+         }else{
+           cloneallAlteWort[srchWort]=localWortObj[srchWort]
+         }
+         delete localWortObj[srchWort]
+       }else{
+        msg.add(2,srchWort,'Arama yapilan bu kelime [source:@ri5: neuWorte], islem sonucunda alinan diger kelimelerle [source:wortObjsArr] eslestirilemedi!')
+       }
+})
+window.localStorage.setItem("@ri5: allAlteWorte", JSON.stringify(cloneallAlteWort))
+window.localStorage.setItem("@ri5: neuWorte", JSON.stringify(localWortObj))
+localWortObj=null
+console.log('msg.container: ',msg.container)
+
   }

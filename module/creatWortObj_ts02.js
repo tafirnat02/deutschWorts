@@ -75,6 +75,7 @@ class Wort {
     Artikel:{txt: "Deklination von Artikel"},
     Nomen: {},
   };
+  searchParams={};
 }
 
 const rpRegExp = /»|⁰|¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹|\(|\)|\n/gi;
@@ -84,7 +85,8 @@ var doc, //alinan sayfa document'i
   wort,
   ele,
   verb,
-  head; //islem gören kelime
+  head,
+  search_Wort; //islem gören kelime
 
 /*--- [1.Kisim: gelen documentden kelime kontrolü ve ilgili fonksiyona yönlendirme] ---*/
 
@@ -146,10 +148,9 @@ async function getObject(dcmnt) {
       });
   } catch (errObj) {
     //msg.add():yeni mesaji dizine ekler, msg.print():hatayi dogrudan ekrana bastirir...
-    let method = errObj.fun === "checkWort" ? "add" : "print";
-
-    window.msg[method](
-      3,
+    let type = errObj.fun === "checkWort" ? ["add",2] : ["print",3];
+    window.msg[type[0]](
+      type[1],
       `Error | ${wort}`,
       `m:creatWortObj*.js f:${errObj.fun}`,
       errObj.err
@@ -161,11 +162,25 @@ function checkWort(dcmnt) {
   return new Promise((resolve) => {
     wort = dcmnt.querySelector("form>div>input").value;
     doc = dcmnt;
+    search_Wort = dcmnt.URL.split("/?w=")[1] 
     if (!checkEl(dcmnt.querySelector("section.rBox"))) {
       byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
       throw `Das Wort "${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}`;
     }
-    resolve();
+
+    if(wort == search_Wort || !byController.localWorte) return resolve();
+
+    //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
+      for( let i in wortObjsArr){
+        if(wort != wortObjsArr[indx].wrt.wort)  continue;
+        wortObjsArr[indx].searchParams[search_Wort]=false
+          let userDef = Object.values(localWortObj[search_Wort])[0];
+          userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5`:"";
+        if(!!userDef)  wortObjsArr[index].lang_TR += userDef
+        byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
+        throw `"${search_Wort}" kelimesi "${wort}" olarak islem yapildi!`;
+      }
+      return resolve();
   });
 }
 
