@@ -175,9 +175,10 @@ function checkWort(dcmnt) {
       return resolve();
     }
 
-    worteList 
-
     let userDef = Object.values(localWortObj[search_Wort])[0];
+
+    console.log('kelime ve tanimlamasi>> ', search_Wort, userDef)
+
     userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? `💭 ${userDef} @ri5`:"";
     if (wortObjsArr.length<1){
       let addPar ={}
@@ -188,9 +189,8 @@ function checkWort(dcmnt) {
      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
       for( let i in wortObjsArr){
         if(wort != wortObjsArr[i].wrt.wort)  continue;
-console.log('eslesme sonucu bulundu >> ', wort, search_Wort)
         wortObjsArr[i].searchParams[search_Wort]=false
-        if(!!userDef)  wortObjsArr[i].lang_TR += userDef
+        if(!!userDef) wortObjsArr[i].lang_TR += userDef
         byController.ahnelnWort = true; //bu obje wortObjsArr eklenmemesi icin
         msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
         throw 'nextWort'

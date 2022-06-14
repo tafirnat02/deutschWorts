@@ -18,7 +18,7 @@ const isEmptyLang = async () => {
   }
   */
   //bu kisim api sisirmemesi icin.... silinecek....
-  wortObjsArr[index].lang_TR = "ceviri alindi @gApi | " + userDef;
+  wortObjsArr[index].lang_TR += "ceviri alindi @gApi";
   return trLang();
   //bu kisim api sisirmemesi icin.... silinecek....
 
