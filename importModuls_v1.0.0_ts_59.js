@@ -1,6 +1,6 @@
-import { runApp } from "./module/creatWortObj_ts05.js";
+import { runApp } from "./module/creatWortObj_ts06.js";
 import { getDoc } from "./module/documents_ts03.js";
-import { getWortObject } from "./module/getWortObj_ts01.js";
+import { getWortObject } from "./module/getWortObj_ts02.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts17.js";
 import { baseFun } from "./module/main_ts08.js";
@@ -179,6 +179,8 @@ await loadBase()
         if(srchWort == wortObjsArr[i].wrt.wort){
           result = true;
         }else{
+          console.log('@impMo..cekimli kelime bulundu:' ,srchWort )
+
           let wSrchP = wortObjsArr[i].searchParams
           let subKeys= Object.keys(wSrchP);
           if(subKeys.length>0){

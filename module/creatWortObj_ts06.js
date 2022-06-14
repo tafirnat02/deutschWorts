@@ -159,10 +159,13 @@ async function getObject(dcmnt) {
       );
     }
     }
+
+    debugger
 }
 
 function checkWort(dcmnt) {
   return new Promise((resolve) => {
+    search_Wort="";
     wort = dcmnt.querySelector("form>div>input").value;
     doc = dcmnt;
     search_Wort = dcmnt.URL.split("/?w=")[1] 
@@ -170,10 +173,16 @@ function checkWort(dcmnt) {
       byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
       throw `Das Wort "${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}`;
     }
+    if(wort == search_Wort ) return resolve();
+    if(!byController.localWorte){
+      msg.add(0,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
+      return resolve();
+    }
 
-    if(wort == search_Wort || !byController.localWorte) return resolve();
+    console.log("search_Wort ve doc.wort", search_Wort, wort)
+  
     let userDef = Object.values(localWortObj[search_Wort])[0];
-    userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5 |  `:"";
+    userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5 | `:"";
     if (wortObjsArr.length<1){
       let addPar ={}
       addPar[search_Wort]=false;
@@ -183,9 +192,10 @@ function checkWort(dcmnt) {
      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
       for( let i in wortObjsArr){
         if(wort != wortObjsArr[i].wrt.wort)  continue;
+console.log('eslesme sonucu bulundu >> ', wort, search_Wort)
         wortObjsArr[i].searchParams[search_Wort]=false
         if(!!userDef)  wortObjsArr[i].lang_TR += userDef
-        byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
+        byController.ahnelnWort = true; //bu obje wortObjsArr eklenmemesi icin
         msg.add(0,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
         throw 'nextWort'
       } 
@@ -492,9 +502,9 @@ function getLang() {
     let srcL1 = doc.querySelector('span[lang="tr"]'), //birinci dom ögesi
       srcL2 = doc.querySelector("form > span.rNobr>a"); //ikinci dom ögesi
     if (checkEl(srcL1)) {
-      newWortObj.lang_TR += srcL1.innerText.replaceAll(rpRegExp, "");
+      newWortObj.lang_TR += srcL1.innerText.replaceAll(rpRegExp, "") + "@🌐 | ";
     } else if (checkEl(srcL2)) {
-      newWortObj.lang_TR += srcL2.innerText.replaceAll(rpRegExp, "");
+      newWortObj.lang_TR += srcL2.innerText.replaceAll(rpRegExp, "") + "@🌐 | ";
     }
     resolve();
   });

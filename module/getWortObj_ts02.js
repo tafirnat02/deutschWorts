@@ -11,8 +11,9 @@ let index,
 const setDoc = async (callback) => {
   await callback(HTMLdocs[index]).then((obj) => {
     index++;
-    if(byController.notFound===true){
+    if(byController.notFound===true || byController.ahnelnWort===true){
       delete byController.notFound; //kelime sayfasi bulunamadi ise wortObjsArr dizinine eklenmez.
+      delete byController.ahnelnWort; //Kelime daha önceden alinip sadece cekim durumu söz konusu ise dizine tekrar eklenmez.
     }else{
       wortObjsArr.push(obj);
     }
