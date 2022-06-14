@@ -18,7 +18,7 @@ const isEmptyLang = async () => {
   }
   */
   //bu kisim api sisirmemesi icin.... silinecek....
-  wortObjsArr[index].lang_TR += "ceviri alindi @gApi";
+  wortObjsArr[index].lang_TR += " 🔎  ceviri alindi.";
   return trLang();
   //bu kisim api sisirmemesi icin.... silinecek....
 
@@ -109,12 +109,10 @@ async function gapiTranslate(wortObj) {
         .then((response) => {
           if (typeof response.message === "string") return resolve("apiLimit");
           //basarili sekilde veri alindi
-          wortObj.lang_TR =
-            response.data["translations"][0].translatedText.replaceAll(
+          wortObj.lang_TR +=" 🔎 " + response.data["translations"][0].translatedText.replaceAll(
               /»|⁰|¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹|\(|\)|\n/gi,
               ""
-            ) +
-            " @gApi" +
+            )
             userDef; //@gApi ile ceviri olarak eklendigi bildirilir...
           return resolve(true); //ceviri basarili sekilde yapildi...
         })

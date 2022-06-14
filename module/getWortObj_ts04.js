@@ -11,19 +11,15 @@ let index,
 const setDoc = async (callback) => {
   await callback(HTMLdocs[index]).then((obj) => {
     index++;
-    if(byController.notFound===true || byController.ahnelnWort===true){
-      delete byController.notFound; //kelime sayfasi bulunamadi ise wortObjsArr dizinine eklenmez.
-      delete byController.ahnelnWort; //Kelime daha önceden alinip sadece cekim durumu söz konusu ise dizine tekrar eklenmez.
-    }else{
-      wortObjsArr.push(obj);
-    }
+    //bulunamayan veya ayni olan kelime ise bu kelime dizine eklenmez
+    if(!app_pano.get("notFound") && !app_pano.get("ahnelnWort")) wortObjsArr.push(obj); 
     docs(callback);
   });
 };
 //HTMLdocs dizinindeki tüm ögeler icin setDoc ile islem yapilir
 const docs = async (callback) => {
   if (index>=len){
-    callNext() //byController.worts = true; //item.search() ile bu asamnin tamamlandigini teyit icin controlObj'de worts propertysi olusturulur...
+    callNext() 
     return true
   }else{
     setDoc(callback);

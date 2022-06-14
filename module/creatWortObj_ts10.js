@@ -166,24 +166,26 @@ function checkWort(dcmnt) {
     doc = dcmnt[1];
    
     if (!checkEl(doc.querySelector("section.rBox"))) {
-      byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
+      app_pano.set("notFound")//bu obje wortObjsArr eklenmemesi icin
+      //byController.notFound = true; 
       throw `Das Wort "${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}`;
     }
-    if(wort == search_Wort ) return resolve();
-    if(!byController.localWorte){
-      msg.add(0,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
+
+    if(!app_pano.check("localWorte")){ //lokalden alinan kelime disinda...
+      if(wort == search_Wort)return resolve();
+      msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
       return resolve();
     }
 
     let userDef = Object.values(localWortObj[search_Wort])[0];
-
-    console.log('kelime ve tanimlamasi>> ', search_Wort, userDef)
-
-    userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? `💭 ${userDef} @ri5`:"";
-    if (wortObjsArr.length<1){
-      let addPar ={}
-      addPar[search_Wort]=false;
-      byController.addSearchParams=[addPar,userDef]
+    userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef}`:"";
+    if(wort == search_Wort){
+      app_pano.set("userDef",userDef);
+    }else if (wortObjsArr.length<1){
+      let newParam ={}
+      newParam[search_Wort]=false;
+      app_pano.set("addSearchParams",newParam);
+      app_pano.set("userDef",userDef);
       msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
     }else{
      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
@@ -191,7 +193,7 @@ function checkWort(dcmnt) {
         if(wort != wortObjsArr[i].wrt.wort)  continue;
         wortObjsArr[i].searchParams[search_Wort]=false
         if(!!userDef) wortObjsArr[i].lang_TR += userDef
-        byController.ahnelnWort = true; //bu obje wortObjsArr eklenmemesi icin
+        app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
         msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
         throw 'nextWort'
       } 
@@ -205,11 +207,8 @@ function newWortObject() {
     //Wort sinifindan nesen olusturulmasi...
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
-    if(!!byController.addSearchParams){
-      newWortObj.searchParams = byController.addSearchParams[0]
-      newWortObj.lang_TR= byController.addSearchParams[1]
-      delete byController.addSearchParams
-    }
+    if(!!app_pano.check("newParam")) newWortObj.searchParams = app_pano.get("newParam") 
+    if(!!app_pano.check("userDef"))  newWortObj.lang_TR= app_pano.get("userDef")
     //kelime tipinin alinmasi
     newWortObj.status.Situation[0] = doc.querySelector(
       "article>div>nav>a[href]"
@@ -498,25 +497,11 @@ function getLang() {
     let srcL1 = doc.querySelector('span[lang="tr"]'), //birinci dom ögesi
       srcL2 = doc.querySelector("form > span.rNobr>a"); //ikinci dom ögesi
     if (checkEl(srcL1)) {
-      newWortObj.lang_TR += srcL1.innerText.replaceAll(rpRegExp, "") + " @🌐 | ";
+      newWortObj.lang_TR += "🌐 " + srcL1.innerText.replaceAll(rpRegExp, "");
     } else if (checkEl(srcL2)) {
-      newWortObj.lang_TR += srcL2.innerText.replaceAll(rpRegExp, "") + " @🌐 | ";
+      newWortObj.lang_TR += "🌐 " + srcL2.innerText.replaceAll(rpRegExp, "");
     }
     resolve();
   });
 }
 
-//Ismin hallerine dair tablo alinir
-function deklinationTbl(){
-  return new Promise((resolve) => {
-
-    resolve();
-  });
-} 
-/*
-function getPostDetails() {
-  return new Promise((resolve) => {
-    resolve();
-  });
-}
-*/
