@@ -148,7 +148,6 @@ async function getObject(dcmnt) {
       });
   } catch (errObj) {
     //msg.add():yeni mesaji dizine ekler, msg.print():hatayi dogrudan ekrana bastirir...
-
     if(errObj.err !=  'nextWort'){
       let type = errObj.fun === "checkWort" ? "add" : "print";
       window.msg[type](
@@ -159,8 +158,6 @@ async function getObject(dcmnt) {
       );
     }
     }
-
-    debugger
 }
 
 function checkWort(dcmnt) {
@@ -502,9 +499,9 @@ function getLang() {
     let srcL1 = doc.querySelector('span[lang="tr"]'), //birinci dom ögesi
       srcL2 = doc.querySelector("form > span.rNobr>a"); //ikinci dom ögesi
     if (checkEl(srcL1)) {
-      newWortObj.lang_TR += srcL1.innerText.replaceAll(rpRegExp, "") + "@🌐 | ";
+      newWortObj.lang_TR += srcL1.innerText.replaceAll(rpRegExp, "") + " @🌐 | ";
     } else if (checkEl(srcL2)) {
-      newWortObj.lang_TR += srcL2.innerText.replaceAll(rpRegExp, "") + "@🌐 | ";
+      newWortObj.lang_TR += srcL2.innerText.replaceAll(rpRegExp, "") + " @🌐 | ";
     }
     resolve();
   });

@@ -1,8 +1,8 @@
-import { runApp } from "./module/creatWortObj_ts06.js";
-import { getDoc } from "./module/documents_ts03.js";
+import { runApp } from "./module/creatWortObj_ts07.js";
+import { getDoc } from "./module/documents_ts04.js";
 import { getWortObject } from "./module/getWortObj_ts02.js";
 import { getImg } from "./module/image_ts08.js";
-import { getLang } from "./module/lang_ts17.js";
+import { getLang } from "./module/lang_ts18.js";
 import { baseFun } from "./module/main_ts08.js";
 
 async function loadBase() {
