@@ -179,14 +179,15 @@ await loadBase()
         if(srchWort == wortObjsArr[i].wrt.wort){
           result = true;
         }else{
-          let srchParams = Object.keys(wortObjsArr[i].searchParams)
-          if(srchParams.length>0){
-            for(srchParam in wortObjsArr[i].searchParams){
-             if(srchWort != srchParam || wortObjsArr[i].searchParams[srchParam]) continue;
-              wortObjsArr[i].searchParams[srchWort] = true;
-              result = true;
-              break;
-            }
+          let wSrchP = wortObjsArr[i].searchParams
+          let subKeys= Object.keys(wSrchP);
+          if(subKeys.length>0){
+            subKeys.forEach(sKey=>{
+              if(srchWort == sKey && !wSrchP[sKey]){
+                wortObjsArr[i].searchParams[srchWort] = true;
+                result = true;
+              }
+            })
          }
         }
         if(result) break;
