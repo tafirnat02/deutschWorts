@@ -169,8 +169,11 @@ function checkWort(dcmnt) {
     }
 
     if(wort == search_Wort || !byController.localWorte) return resolve();
-
-    //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
+   
+    if (wortObjsArr.length<1){
+      byController.addSearchParams=localWortObj[search_Wort]
+    }else{
+     //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
       for( let i in wortObjsArr){
         if(wort != wortObjsArr[i].wrt.wort)  continue;
         wortObjsArr[i].searchParams[search_Wort]=false
@@ -179,7 +182,8 @@ function checkWort(dcmnt) {
         if(!!userDef)  wortObjsArr[i].lang_TR += userDef
         byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
         throw `"${search_Wort}" kelimesi "${wort}" olarak islem yapildi!`;
-      }
+      } 
+    }
       return resolve();
   });
 }
@@ -189,6 +193,10 @@ function newWortObject() {
     //Wort sinifindan nesen olusturulmasi...
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
+    if(!!byController.addSearchParams){
+      newWortObj.searchParams = byController.addSearchParams
+      delete byController.addSearchParams
+    }
     //kelime tipinin alinmasi
     newWortObj.status.Situation[0] = doc.querySelector(
       "article>div>nav>a[href]"
