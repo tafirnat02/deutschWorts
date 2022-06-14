@@ -148,14 +148,17 @@ async function getObject(dcmnt) {
       });
   } catch (errObj) {
     //msg.add():yeni mesaji dizine ekler, msg.print():hatayi dogrudan ekrana bastirir...
-    let type = errObj.fun === "checkWort" ? ["add",2] : ["print",3];
-    window.msg[type[0]](
-      type[1],
-      `Error | ${wort}`,
-      `m:creatWortObj*.js f:${errObj.fun}`,
-      errObj.err
-    );
-  }
+
+    if(errObj.err !=  'nextWort'){
+      let type = errObj.fun === "checkWort" ? "add" : "print";
+      window.msg[type](
+        3,
+        ` ${wort} `,
+        `m:creatWortObj*.js f:${errObj.fun}`,
+        errObj.err
+      );
+    }
+    }
 }
 
 function checkWort(dcmnt) {
@@ -169,19 +172,22 @@ function checkWort(dcmnt) {
     }
 
     if(wort == search_Wort || !byController.localWorte) return resolve();
-   
+    let userDef = Object.values(localWortObj[search_Wort])[0];
+    userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5 |  `:"";
     if (wortObjsArr.length<1){
-      byController.addSearchParams=localWortObj[search_Wort]
+      let addPar ={}
+      addPar[search_Wort]=false;
+      byController.addSearchParams=[addPar,userDef]
+      msg.add(0,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
     }else{
      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
       for( let i in wortObjsArr){
         if(wort != wortObjsArr[i].wrt.wort)  continue;
         wortObjsArr[i].searchParams[search_Wort]=false
-          let userDef = Object.values(localWortObj[search_Wort])[0];
-          userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5`:"";
         if(!!userDef)  wortObjsArr[i].lang_TR += userDef
         byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
-        throw `"${search_Wort}" kelimesi "${wort}" olarak islem yapildi!`;
+        msg.add(0,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
+        throw 'nextWort'
       } 
     }
       return resolve();
@@ -194,7 +200,8 @@ function newWortObject() {
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
     if(!!byController.addSearchParams){
-      newWortObj.searchParams = byController.addSearchParams
+      newWortObj.searchParams = byController.addSearchParams[0]
+      newWortObj.lang_TR= byController.addSearchParams[1]
       delete byController.addSearchParams
     }
     //kelime tipinin alinmasi
@@ -485,9 +492,9 @@ function getLang() {
     let srcL1 = doc.querySelector('span[lang="tr"]'), //birinci dom ögesi
       srcL2 = doc.querySelector("form > span.rNobr>a"); //ikinci dom ögesi
     if (checkEl(srcL1)) {
-      newWortObj.lang_TR = srcL1.innerText.replaceAll(rpRegExp, "");
+      newWortObj.lang_TR += srcL1.innerText.replaceAll(rpRegExp, "");
     } else if (checkEl(srcL2)) {
-      newWortObj.lang_TR = srcL2.innerText.replaceAll(rpRegExp, "");
+      newWortObj.lang_TR += srcL2.innerText.replaceAll(rpRegExp, "");
     }
     resolve();
   });
