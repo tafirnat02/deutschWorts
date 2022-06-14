@@ -1,4 +1,4 @@
-import { runApp } from "./module/creatWortObj_ts02.js";
+import { runApp } from "./module/creatWortObj_ts03.js";
 import { getDoc } from "./module/documents_ts03.js";
 import { getWortObject } from "./module/getWortObj_ts01.js";
 import { getImg } from "./module/image_ts08.js";
@@ -204,7 +204,7 @@ await loadBase()
          }
          delete localWortObj[srchWort]
        }else{
-        msg.add(2,srchWort,'Arama yapilan bu kelime [source:@ri5: neuWorte], islem sonucunda alinan diger kelimelerle [source:wortObjsArr] eslestirilemedi!')
+        msg.add(2,srchWort,'Arama yapilan bu kelime, islem sonucunda alinan diger kelimelerle eslestirilemedi!')
        }
 })
 window.localStorage.setItem("@ri5: allAlteWorte", JSON.stringify(cloneallAlteWort))

@@ -172,11 +172,11 @@ function checkWort(dcmnt) {
 
     //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
       for( let i in wortObjsArr){
-        if(wort != wortObjsArr[indx].wrt.wort)  continue;
-        wortObjsArr[indx].searchParams[search_Wort]=false
+        if(wort != wortObjsArr[i].wrt.wort)  continue;
+        wortObjsArr[i].searchParams[search_Wort]=false
           let userDef = Object.values(localWortObj[search_Wort])[0];
           userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5`:"";
-        if(!!userDef)  wortObjsArr[index].lang_TR += userDef
+        if(!!userDef)  wortObjsArr[i].lang_TR += userDef
         byController.notFound = true; //bu obje wortObjsArr eklenmemesi icin
         throw `"${search_Wort}" kelimesi "${wort}" olarak islem yapildi!`;
       }
