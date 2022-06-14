@@ -1,6 +1,6 @@
-import { runApp } from "./module/creatWortObj_ts10.js";
+import { runApp } from "./module/creatWortObj_ts11.js";
 import { getDoc } from "./module/documents_ts05.js";
-import { getWortObject } from "./module/getWortObj_ts04.js";
+import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts20.js";
 import { baseFun } from "./module/main_ts09.js";
@@ -45,7 +45,7 @@ const reorganizer = clear =>{
       localWortArr.sort()
       allLocalList=localWortArr.join(",")
       shortWortList=localWortArr.slice(0,12).join(', ') + (localWortArr.length>12?'...':'')
-      let localWort = confirm(`🪃 Sayfada yakalanan kelimeler bulunmakta. 🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌Kelimeler: ${shortWortList}`)
+      let localWort = confirm(`🪃 Sayfada yakalanan kelimeler bulunmakta.\n🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌 Kelimeler: ${shortWortList}`)
       if(!!localWort){
         app_pano.set("localWorte");
         window.localWortObj=localWortObj;

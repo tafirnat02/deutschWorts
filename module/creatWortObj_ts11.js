@@ -171,12 +171,8 @@ function checkWort(dcmnt) {
       throw `Das Wort "${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}`;
     }
 
-    if(!app_pano.check("localWorte")){ //lokalden alinan kelime disinda...
-      if(wort == search_Wort)return resolve();
-      msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
-      return resolve();
-    }
-
+    if(!app_pano.check("localWorte")) return resolve();
+ 
     let userDef = Object.values(localWortObj[search_Wort])[0];
     userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef}`:"";
     if(wort == search_Wort){
@@ -497,9 +493,9 @@ function getLang() {
     let srcL1 = doc.querySelector('span[lang="tr"]'), //birinci dom ögesi
       srcL2 = doc.querySelector("form > span.rNobr>a"); //ikinci dom ögesi
     if (checkEl(srcL1)) {
-      newWortObj.lang_TR += "🌐 " + srcL1.innerText.replaceAll(rpRegExp, "");
+      newWortObj.lang_TR += " 🌐 " + srcL1.innerText.replaceAll(rpRegExp, "");
     } else if (checkEl(srcL2)) {
-      newWortObj.lang_TR += "🌐 " + srcL2.innerText.replaceAll(rpRegExp, "");
+      newWortObj.lang_TR += " 🌐 " + srcL2.innerText.replaceAll(rpRegExp, "");
     }
     resolve();
   });
