@@ -194,7 +194,7 @@ function checkWort(dcmnt) {
         neuWort=true
       }
       if(!neuWort){
-        let newParam ={}
+        let newParam ={};
         newParam[search_Wort]=false;
         app_pano.set("addSearchParams",newParam);
         !!userDef? app_pano.set("userDef",userDef):'';
@@ -210,10 +210,10 @@ function newWortObject() {
     //Wort sinifindan nesen olusturulmasi...
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
-    if(!!app_pano.check("localWorte")){
-      newWortObj.searchParams = app_pano.get("newParam")
-      newWortObj.lang_TR= app_pano.get("userDef") 
-    }
+
+      !!app_pano.check("newParam")?newWortObj.searchParams = app_pano.get("newParam"):"";
+      !!app_pano.check("userDef")?newWortObj.lang_TR= app_pano.get("userDef"):"";
+    
     //kelime tipinin alinmasi
     newWortObj.status.Situation[0] = doc.querySelector(
       "article>div>nav>a[href]"
