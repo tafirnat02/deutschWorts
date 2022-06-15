@@ -180,23 +180,24 @@ function checkWort(dcmnt) {
     if(!_local_) return resolve();
  
     if(wort == search_Wort){
-      app_pano.set("userDef",userDef);
-    }else if (wortObjsArr.length<1){
-      let newParam ={}
-      newParam[search_Wort]=false;
-      app_pano.set("addSearchParams",newParam);
-      app_pano.set("userDef",userDef);
-      msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
+      !!userDef? app_pano.set("userDef",userDef):'';
     }else{
      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
-      for( let i in wortObjsArr){
+      let neuWort=false;
+     for( let i in wortObjsArr){
         if(wort != wortObjsArr[i].wrt.wort)  continue;
         wortObjsArr[i].searchParams[search_Wort]=false
         if(!!userDef) wortObjsArr[i].lang_TR += userDef
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
-        msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
-        throw 'nextWort'
-      } 
+        neuWort=true
+      }
+      if(!neuWort){
+        let newParam ={}
+        newParam[search_Wort]=false;
+        app_pano.set("addSearchParams",newParam);
+        !!userDef? app_pano.set("userDef",userDef):'';
+      }
+      msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
     }
       return resolve();
   });
@@ -207,20 +208,10 @@ function newWortObject() {
     //Wort sinifindan nesen olusturulmasi...
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
-    if(!!app_pano.check("newParam") || !!app_pano.check("userDef")){
-      console.log(
-        'öncesi ',
-        app_pano.container["newParam"],
-        app_pano.container["userDef"]
-      )
+    if(!!app_pano.check("localWorte")){
       newWortObj.searchParams = app_pano.get("newParam")
-      newWortObj.lang_TR= app_pano.get("userDef")
-      console.log(
-        'sonrasi ',
-        app_pano.container["newParam"],
-        app_pano.container["userDef"]
-      )
-    } 
+      newWortObj.lang_TR= app_pano.get("userDef") 
+    }
     //kelime tipinin alinmasi
     newWortObj.status.Situation[0] = doc.querySelector(
       "article>div>nav>a[href]"
