@@ -207,8 +207,20 @@ function newWortObject() {
     //Wort sinifindan nesen olusturulmasi...
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
-    if(!!app_pano.check("newParam")) newWortObj.searchParams = app_pano.get("newParam") 
-    if(!!app_pano.check("userDef"))  newWortObj.lang_TR= app_pano.get("userDef")
+    if(!!app_pano.check("newParam") || !!app_pano.check("userDef")){
+      console.log(
+        'öncesi ',
+        app_pano.container["newParam"],
+        app_pano.container["userDef"]
+      )
+      newWortObj.searchParams = app_pano.get("newParam")
+      newWortObj.lang_TR= app_pano.get("userDef")
+      console.log(
+        'sonrasi ',
+        app_pano.container["newParam"],
+        app_pano.container["userDef"]
+      )
+    } 
     //kelime tipinin alinmasi
     newWortObj.status.Situation[0] = doc.querySelector(
       "article>div>nav>a[href]"
