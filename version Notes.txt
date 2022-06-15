@@ -1,6 +1,8 @@
 
-version 1.0.0 : 08/06/2022
 
-> uygulama ile locale gönderilen kelimeler 
-    eger kelime varsa abfrage.neu ile isleme alinmalidaha sonra bu kelimeler 
-    allAltenWorte olarak ayri sekilde tutulmali.---olaki bir hata vs oldu oradan mudahale etmek icin vs....+
+-kelimelerin cekimlerinin neulokal listeden kaldirilmasi problemi
+    keliemelerin alinmasi prblemli....
+
+-yüklendikten sonra cikan uyari silem sonrasinda cikmamasi gerekirken cikiyor
+
+sub keylerde tutulan tanimlama bilgisi ayni ise ilgili subKey kaldirilmali....
