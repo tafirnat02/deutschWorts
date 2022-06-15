@@ -161,20 +161,24 @@ async function getObject(dcmnt) {
 
 function checkWort(dcmnt) {
   return new Promise((resolve) => {
-    let search_Wort=dcmnt[0];
+    let userDef, search_Wort=dcmnt[0],
+    _local_ =!!app_pano.check("localWorte");
     wort = dcmnt[1].querySelector("form>div>input").value;
     doc = dcmnt[1];
-   
-    if (!checkEl(doc.querySelector("section.rBox"))) {
-      app_pano.set("notFound")//bu obje wortObjsArr eklenmemesi icin
-      //byController.notFound = true; 
-      throw `Das Wort "${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}`;
+    
+    if(_local_){
+      userDef = Object.values(localWortObj[search_Wort])[0];
+      userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef}`:"";
     }
 
-    if(!app_pano.check("localWorte")) return resolve();
+    if (!checkEl(doc.querySelector("section.rBox"))) {
+      app_pano.set("notFound")//bu obje wortObjsArr eklenmemesi icin
+      if(_local_) delete localWortObj[search_Wort] //bulunamdi ise local objeden kaldirilir... 
+      throw `Das Wort "${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${_local_ && !!userDef?'\n'+userDef:''}`;
+    }
+
+    if(!_local_) return resolve();
  
-    let userDef = Object.values(localWortObj[search_Wort])[0];
-    userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef}`:"";
     if(wort == search_Wort){
       app_pano.set("userDef",userDef);
     }else if (wortObjsArr.length<1){
