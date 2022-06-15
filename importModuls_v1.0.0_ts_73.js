@@ -181,43 +181,38 @@ await loadBase()
 
 function changeLocalWorte() {
   //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-  let neuWotreKeys = Object.keys(localWortObj),
-    archive = storage.get("allAlteWorte");
+  let  archive = storage.get("allAlteWorte");
   if (!archive) archive = {};
 
-  neuWotreKeys.forEach((srchWort) => {
+  Object.keys(localWortObj).forEach(srchWort => {
     let result = false;
     for (let i = 0; i < wortObjsArr.length; i++) {
       if (srchWort == wortObjsArr[i].wrt.wort) {
+        console.log(srchWort)
+        debugger
         result = true;
       } else {
         if(wortObjsArr[i].searchParams[srchWort] === false){
            wortObjsArr[i].searchParams[srchWort] =true
+           console.log(srchWort, wortObjsArr[i].wrt.wort,wortObjsArr[i].searchParams[srchWort] )
+           debugger
            result =true
         }
       }
       if(result) break;
-/*
-        let wSrchP = wortObjsArr[i].searchParams;
-        let subKeys = Object.keys(wSrchP);
-        if (subKeys.length > 0) {
-          subKeys.forEach((sKey) => {
-            if (srchWort == sKey && !wSrchP[sKey]) {
-              wortObjsArr[i].searchParams[srchWort] = true;
-              result = true;
-            }
-          });
-        }*/
       }      
-    
     if (result) {
       //neuWortListe'deki kelime archive yani @ri5: allAlteWorte'e tasinir
       if (!!archive[srchWort]) {
+        console.log(srchWort, "bu kelime arside var")
+        debugger
         let subKey = Object.keys(localWortObj[srchWort])[0],subVal = Object.values(localWortObj[srchWort])[0];
         Object.keys(archive[srchWort]).forEach(k=> {if(archive[srchWort][k] == false) delete archive[srchWort][k]}) 
         subVal = subVal == "Kelimeyi tanimla..." || !subVal ? false : subVal;
         archive[srchWort][subKey] = subVal;
       } else {
+        console.log(srchWort, "bu kelime arsive  yeni ekleniyor..")
+        debugger
         archive[srchWort] = localWortObj[srchWort];
       }
       delete localWortObj[srchWort];
