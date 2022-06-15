@@ -182,8 +182,8 @@ await loadBase()
 function changeLocalWorte() {
   //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
   let neuWotreKeys = Object.keys(localWortObj),
-    cloneallAlteWort = storage.get("allAlteWorte");
-  if (!cloneallAlteWort) cloneallAlteWort = {};
+    archive = storage.get("allAlteWorte");
+  if (!archive) archive = {};
 
   neuWotreKeys.forEach((srchWort) => {
     let result = false;
@@ -191,6 +191,13 @@ function changeLocalWorte() {
       if (srchWort == wortObjsArr[i].wrt.wort) {
         result = true;
       } else {
+        if(wortObjsArr[i].searchParams[srchWort] === false){
+           wortObjsArr[i].searchParams[srchWort] =true
+           result =true
+        }
+      }
+      if(result) break;
+/*
         let wSrchP = wortObjsArr[i].searchParams;
         let subKeys = Object.keys(wSrchP);
         if (subKeys.length > 0) {
@@ -200,20 +207,18 @@ function changeLocalWorte() {
               result = true;
             }
           });
-        }
-      }
-      if (result) break;
-    }
+        }*/
+      }      
+    
     if (result) {
-      //neuWortListe'deki kelime archive: cloneallAlteWort'e tasinir
-      if (!!cloneallAlteWort[srchWort]) {
-        // Kelime tanimla ise alinmayaca veya bos ise...
-        let subKey = Object.keys(localWortObj[srchWort])[0],
-          subVal = Object.values(localWortObj[srchWort])[0];
+      //neuWortListe'deki kelime archive yani @ri5: allAlteWorte'e tasinir
+      if (!!archive[srchWort]) {
+        let subKey = Object.keys(localWortObj[srchWort])[0],subVal = Object.values(localWortObj[srchWort])[0];
+        Object.keys(archive[srchWort]).forEach(k=> {if(archive[srchWort][k] == false) delete archive[srchWort][k]}) 
         subVal = subVal == "Kelimeyi tanimla..." || !subVal ? false : subVal;
-        if (subVal) cloneallAlteWort[srchWort][subKey] = subVal;
+        archive[srchWort][subKey] = subVal;
       } else {
-        cloneallAlteWort[srchWort] = localWortObj[srchWort];
+        archive[srchWort] = localWortObj[srchWort];
       }
       delete localWortObj[srchWort];
     } else {
@@ -224,20 +229,16 @@ function changeLocalWorte() {
       );
     }
   });
-  window.localStorage.setItem(
-    "@ri5: allAlteWorte",
-    JSON.stringify(cloneallAlteWort)
-  );
-  window.localStorage.setItem("@ri5: neuWorte", JSON.stringify(localWortObj));
+  storage.set("neuWorte",localWortObj);
   localWortObj = null;
-  removeOldLocalWorte(cloneallAlteWort);
+  removeOldLocalWorte(archive);
 }
 
-function removeOldLocalWorte(alteWorte) {
-  //bunun ile lokalde tutulan kelimeler silinir...
+function removeOldLocalWorte(archive) {
+  //bunun ile lokalde tutulan "@ri5: archive" durumu kontrol edilerek sismeyi engeller...
   let limit = 1000,
     monat,
-    keys = Object.keys(alteWorte);
+    keys = Object.keys(archive);
   if (keys.length > limit) {
     alert(
       `⛔ Lokalde ${limit}'den fazla kelime ve tanim bilgileri tutulmakta.\nEski tarihlilerden baslanarak silinecektir!`
@@ -256,7 +257,7 @@ function removeOldLocalWorte(alteWorte) {
 
   let dateArr = []; //tarihe göre sirali olarak tutulur
   keys.forEach((k) => {
-    Object.keys(alteWorte[k]).forEach((sk) => {
+    Object.keys(archive[k]).forEach((sk) => {
       let d = sk.split("_")[0].split(".");
       d = new Date(`${d[2]}-${d[1]}-${d[0]} ${sk.split("_")[1]}`);
       dateArr.push([d, k, sk]); //tarih nesnesi, kelime adi, tarih (string) olarak alt key
@@ -268,18 +269,18 @@ function removeOldLocalWorte(alteWorte) {
     let t = new Date();
     let selectedDate = new Date(t.setMonth(t.getMonth() - monat)); // new Date(t.setHours(t.getHours()-monat))
     dateArr.forEach((i) => {
-      if (i[0] < selectedDate) delete alteWorte[i[1]][i[2]];
+      if (i[0] < selectedDate) delete archive[i[1]][i[2]];
     });
   } else {
     dateArr.slice(limit, dateArr.length).forEach((i) => {
-      delete alteWorte[i[1]][i[2]];
+      delete archive[i[1]][i[2]];
     });
   }
   //eger key altinda öge kalmadi ise ilgili key silinir
   keys.forEach((k) =>
-    Object.keys(alteWorte[k]).length < 1 ? delete alteWorte[k] : ""
+    Object.keys(archive[k]).length < 1 ? delete archive[k] : ""
   );
-  //yeni deger atanir...
-  storage.set("allAlteWorte", JSON.stringify(alteWorte));
-  alteWorte = null;
+  //yeni deger allAlteWorte atanir...
+  storage.set("allAlteWorte", archive);
+  archive = null;
 }
