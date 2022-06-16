@@ -19,8 +19,8 @@ async function loadBase() {
   });
 }
 
-const reorganizer = (clear) => {
-  window.reorganizer = reorganizer;
+const reorganizer = (clear=false) => {
+  if(!window.reorganizer) window.reorganizer = reorganizer;
   if (clear) console.clear();
   let exList = false;
   let lastIndex = storage.get("lastIndex", true);
@@ -42,17 +42,14 @@ const reorganizer = (clear) => {
     if (lastWortIndexObj) storage.remove("lastIndex");
     return (abfrage.neu = exList);
   } else if (Object.keys(localWortObj).length > 0) {
-    let localWortArr = [],
-      shortWortList,
+    let localWortArr = [],shortList,
       allLocalList;
     for (let k_ in localWortObj) localWortArr.push(k_);
-    localWortArr.sort();
+    //localWortArr.sort();
     allLocalList = localWortArr.join(",");
-    shortWortList =
-      localWortArr.slice(0, 12).join(", ") +
-      (localWortArr.length > 12 ? "..." : "");
+    shortList= kurzeListe(localWortArr)
     let localWort = confirm(
-      `🪃 Sayfada yakalanan kelimeler bulunmakta.\n🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌 Kelimeler: ${shortWortList}`
+      `🪃 Sayfada yakalanan kelimeler bulunmakta.\n🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌 Kelimeler: ${shortList}`
     );
     if (!!localWort) {
       app_pano.set("localWorte");
@@ -65,11 +62,12 @@ const reorganizer = (clear) => {
       }
     }
   }
-  msg.print(
+  let zBs= ' abfrage.neu = " Tüte "   oder   abfrage.neu = " Tüte, Haus, Fenster "',
+  msgTxt= clear?"\nYeni kelime sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )":zBs;
+  zBs = clear?zBs:null;
+   msg.print(
     0,
-    "Yeni Sorgulama Yap",
-    "\nYeni sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )",
-    ' abfrage.neu = " Tüte "   oder   \n abfrage.neu = " Tüte, Haus, Fenster "'
+    "Yeni Sorgulama",msgTxt,zBs
   );
 };
 
@@ -86,7 +84,7 @@ async function appStarter() {
             "Kelimeler icin islem tekrarlanmasi iptal edildi.\n",
             worteList
           );
-          reorganizer(false);
+          reorganizer();
           return;
         }
         return finish();
@@ -101,7 +99,7 @@ async function appStarter() {
         console.warn(
           "Islem yapilacak kelime bulunamadi!\n'abfrage.neu' ile yeni kelime girisi yapin!"
         );
-        reorganizer(false);
+        reorganizer();
       } else {
         console.log(error);
       }
@@ -154,7 +152,6 @@ async function get_langTR() {
 async function finish() {
   callNext = () => {}; //bos fonksiyon atanir
   if (app_pano.get("localWorte")) changeLocalWorte.call();
-
   storage.set("lastWortList", worteList, 3);
   console.clear();
   msg.allPrint();
@@ -168,7 +165,7 @@ async function finish() {
     result.then(msg.group());
   });
   console.log("\n");
-  reorganizer(false);
+  reorganizer();
 }
 
 await loadBase()
@@ -275,4 +272,8 @@ function removeOldLocalWorte(archive) {
   //yeni deger allAlteWorte atanir...
   storage.set("allAlteWorte", archive);
   archive = null;
+}
+
+function kurzeListe(arr,len=12){
+  return  (arr.slice(0, len).join(", ")) + (arr.length > len ? "..." : "");
 }
