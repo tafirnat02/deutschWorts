@@ -64,7 +64,7 @@ async function checkLang(wortObj) {
         if (response === true) return trLang(); //basarili
         if (response === "apiLimit") {
           //api limiti
-          storage.set("gapiLang", storage.get("gapiLang").value + 1, 12); //api key index no siradaki olarak atanir
+          storage.set("gapiLang", storage.get("gapiLang") + 1, 12); //api key index no siradaki olarak atanir
           isEmptyLang(); // ayni kelime icin islem siradaki key ile tekrar denenir...
         }
         //hata dönderilir ise hata firlatilir ve sonrakine gecilir...
