@@ -153,8 +153,15 @@ function setItems() {
       this.remove(name); //tarih güncel olmadiginda lokaldeki obje kaldrilir.
       return false;
     },
-    remove: function (name) {
-      window.localStorage.removeItem(`@ri5: ${name}`);
+    remove: function (name,key=null) {
+      if(!key){
+        window.localStorage.removeItem(`@ri5: ${name}`);
+      }else{
+        let clone =  this.get(name,true);
+        if(!clone) return false
+        delete clone[key];
+        window.localStorage.setItem(`@ri5: ${name}`, JSON.stringify(clone));
+      }
     },
     addHour: function (hour) {
       //olusturulan zaman damgasi ile local storagedeki objenin güncelligi kontrol edilir.
@@ -165,7 +172,7 @@ function setItems() {
     newKey:function(name,nKey,nVal=false,childKey=false){
       let cloneLocalObj =  this.get(name,true)
       if(!cloneLocalObj) return //aranilan obje lokalde yoksa islemden cikilir
-      if(childKey){//key altinda yeni child key olusturur
+      if(!!childKey){//key altinda yeni child key olusturur
         if(!cloneLocalObj[childKey]) cloneLocalObj[childKey]={}
             cloneLocalObj[childKey][nKey]=nVal
       }else{

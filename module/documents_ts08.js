@@ -53,8 +53,7 @@ const getDoc = async () => {
           err
         );
         //localStorage islemleri
-        storage.set("lastIndex", strt, 3); //yeni local obje icin index atanir,3 saatten kisa olanlar dikkate alinir
-        storage.newKey("lastIndex","check",true) //lastIndex objesine check adli yeni key ve value eklenir.
+        storage.newKey("lastWortList","lastIndex",strt)
         if(strt==0)callNext =finish //daha ilk kelime sorgusunda eger hata alinir ise... dogrudan finish yürütülür....
         finishDoc(HTMLdocuments); //hataya kadar alinan ögeler isleme alinir....
       });

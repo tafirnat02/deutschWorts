@@ -1,9 +1,9 @@
 import { runApp } from "./module/creatWortObj_ts19.js";
-import { getDoc } from "./module/documents_ts07.js";
+import { getDoc } from "./module/documents_ts08.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
-import { baseFun } from "./module/main_ts12.js";
+import { baseFun } from "./module/main_ts13.js";
 
 async function loadBase() {
   return new Promise((resolve, reject) => {
@@ -22,27 +22,22 @@ async function loadBase() {
 const reorganizer = (clear=false) => {
   if(!window.reorganizer) window.reorganizer = reorganizer;
   if (clear) console.clear();
-  let exList = false;
-  let lastIndex = storage.get("lastIndex", true);
-  let lastWortList = storage.get("lastWortList");
+  let exList = false, shortList="";
+  //let lastIndex = storage.get("lastIndex");
+  let lastWortList = storage.get("lastWortList",true);
   let localWortObj = storage.get("neuWorte");
-  if (lastWortList) {
-    if (lastIndex.check) {
-      let subList = lastWortList
-        .slice(lastIndex.value, lastWortList.length)
+    if (!isNaN(parseInt(lastWortList.lastIndex))) {//<< indexde sayi olma durumunun kontrolü icin
+      let subList = lastWortList.value.slice(lastWortList.lastIndex, lastWortList.vaule.length)
         .join(", ");
+      shortList=kurzeListe(subList)
       exList = confirm(
-        `🛸Son sorguda islem yapilamamis kelimeler tespit edildi!\n📋Eski kelimelerden devam edilsin mi?\n\n🔖Kelime listesi: ${subList}`
+        `🛸Son sorguda islem yapilamamis kelimeler tespit edildi!\n📋Eski kelimelerden devam edilsin mi?\n\n🔖Kelime listesi: ${shortList}`
       );
       exList = exList ? subList : false;
-    }
-    storage.newKey("lastIndex", "check", false);
-  }
-  if (!!exList) {
-    if (lastWortIndexObj) storage.remove("lastIndex");
+      storage.remove("lastWortList","lastIndex");//objedeki index keyi lokalden kaldirlir...
     return (abfrage.neu = exList);
   } else if (Object.keys(localWortObj).length > 0) {
-    let localWortArr = [],shortList,
+    let localWortArr = [],
       allLocalList;
     for (let k_ in localWortObj) localWortArr.push(k_);
     //localWortArr.sort();
