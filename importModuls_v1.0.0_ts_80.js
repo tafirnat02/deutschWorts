@@ -198,14 +198,14 @@ function changeLocalWorte() {
     if (result) {
       //neuWortListe'deki kelime archive yani @ri5: allAlteWorte'e tasinir
       if (!!archive[srchWort]) {
-        let oldKey = Object.keys(localWortObj[srchWort])[0],
-            oldVal = Object.values(localWortObj[srchWort])[0];
-console.log('old key/value: ', oldKey,oldVal)  
+        let newKey = Object.keys(localWortObj[srchWort])[0],
+            newVal = Object.values(localWortObj[srchWort])[0]; 
         Object.keys(archive[srchWort]).forEach((k) => {
+console.log('kelime>old key/value: ', srchWort,k,archive[srchWort][k]) 
           if (!archive[srchWort][k]) delete archive[srchWort][k];
         });
-        oldVal = !!oldVal ? oldVal : null;
-        archive[srchWort][oldKey] = oldVal;
+        newVal = !!newVal ? newVal : null;
+        archive[srchWort][newKey] = newVal;
       } else {
         archive[srchWort] = localWortObj[srchWort];
       }
