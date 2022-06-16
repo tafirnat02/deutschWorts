@@ -80,7 +80,7 @@ function setItems() {
       },
     },
     container: [],
-    add: function (msgTyp, title, text, add = "") {
+    add: function (msgTyp, title, text, add = false) {
       let newMsg = [msgTyp, title, text, add];
       this.container.push(newMsg);
     },
