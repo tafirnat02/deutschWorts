@@ -197,7 +197,7 @@ function checkWort(dcmnt) {
         app_pano.set("addSearchParams",newParam);
         !!userDef? app_pano.set("userDef",userDef):'';
       }
-      msg.add(4,search_Wort,`"${search_Wort}" kelimesi, "${wort}" olarak islem yapildi!`);
+      msg.add(4,search_Wort,`Bu kelime, "${wort}" olarak islem yapildi!`);
     }
       return resolve();
   });

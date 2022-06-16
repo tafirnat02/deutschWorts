@@ -99,7 +99,7 @@ function setItems() {
       } 
       this.container.sort();
       //islem kayit sonuclari gruplu(false=>acik) olarak gösterilir
-      this.group(0, "Sorgu Sonucu", "Alinan hatalara dair aciklamalar:", false);
+      this.group(0, "Sorgu Sonucu", "Isleme dair aciklamalar:", false);
       this.container.forEach((msg) => {
         let msgTyp, title, text, add;
         [msgTyp, title, text, add] = msg; //degiskenlere array degerleri atanir

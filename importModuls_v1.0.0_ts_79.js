@@ -1,9 +1,9 @@
-import { runApp } from "./module/creatWortObj_ts18.js";
+import { runApp } from "./module/creatWortObj_ts19.js";
 import { getDoc } from "./module/documents_ts07.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
-import { baseFun } from "./module/main_ts11.js";
+import { baseFun } from "./module/main_ts12.js";
 
 async function loadBase() {
   return new Promise((resolve, reject) => {
@@ -200,6 +200,7 @@ function changeLocalWorte() {
       if (!!archive[srchWort]) {
         let oldKey = Object.keys(localWortObj[srchWort])[0],
             oldVal = Object.values(localWortObj[srchWort])[0];
+console.log('old key/value: ', oldKey,oldVal)  
         Object.keys(archive[srchWort]).forEach((k) => {
           if (!archive[srchWort][k]) delete archive[srchWort][k];
         });
