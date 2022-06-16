@@ -142,11 +142,14 @@ function setItems() {
       //olusturulan nesne local storagee aktarilir
       window.localStorage.setItem(this.obj.name, JSON.stringify(this.obj));
     },
-    get: function (name) {
+    get: function (name,base=false) {
+      /*sadece "name" girisi: varsa objedeki value keyinde tutulan deger dönderilir, yoksa false
+        "name" ve "base:[true]/[anyKey]" girisi: true: objenin kendisini, [anyKey] varsa ilgilialt key value ciftini döner.
+        */
       let localObj = JSON.parse(window.localStorage.getItem(`@ri5: ${name}`));
-      if (!localObj) return false;
-      if(name == 'neuWorte' || name == 'allAlteWorte') return localObj.value;
-      if (new Date(localObj.date) > new Date()) return localObj.value; // key ve tarih gecerli ise geriye obje dönderilir...
+      if (!localObj || (!!base && base != true && !localObj[base])) return false;
+      if(name == 'neuWorte' || name == 'allAlteWorte') return base?localObj:localObj.value;
+      if (new Date(localObj.date) > new Date()) return !!base & base !=true?localObj[base]:!!base?localObj:localObj.value; // key ve tarih gecerli ise geriye obje veya degeri dönderilir...
       this.remove(name); //tarih güncel olmadiginda lokaldeki obje kaldrilir.
       return false;
     },
@@ -159,13 +162,14 @@ function setItems() {
         new Date().setTime(new Date().getTime() + hour * 60 * 60 * 1000) // saat >>
       );
     },
-    newKey:function(name,nKey,nVal,subKey=false){
-      let cloneLocalObj =  this.get(name)
+    newKey:function(name,nKey,nVal=false,childKey=false){
+      let cloneLocalObj =  this.get(name,true)
       if(!cloneLocalObj) return //aranilan obje lokalde yoksa islemden cikilir
-      if(!!subKey){//obje hild key (yoksa atar) icin yeni key ve value grisi yapar
-        if(!cloneLocalObj[subKey]) cloneLocalObj[subKey]={}
-            cloneLocalObj[subKey][nKey]=nVal
+      if(childKey){//key altinda yeni child key olusturur
+        if(!cloneLocalObj[childKey]) cloneLocalObj[childKey]={}
+            cloneLocalObj[childKey][nKey]=nVal
       }else{
+        //dorudan key olusturur
          cloneLocalObj[nKey]=nVal; 
       }
       window.localStorage.setItem(`@ri5: ${name}`, JSON.stringify(cloneLocalObj));

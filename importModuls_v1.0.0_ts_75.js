@@ -1,9 +1,9 @@
-import { runApp } from "./module/creatWortObj_ts16.js";
-import { getDoc } from "./module/documents_ts06.js";
+import { runApp } from "./module/creatWortObj_ts17.js";
+import { getDoc } from "./module/documents_ts07.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
-import { baseFun } from "./module/main_ts10.js";
+import { baseFun } from "./module/main_ts11.js";
 
 async function loadBase() {
   return new Promise((resolve, reject) => {
@@ -23,25 +23,23 @@ const reorganizer = (clear) => {
   window.reorganizer = reorganizer;
   if (clear) console.clear();
   let exList = false;
-  let lastWortIndexObj = storage.get("wortListIndex");
-  let lastWortListObj = storage.get("lastWortList");
+  let lastIndex = storage.get("lastIndex",true);
+  let lastWortList = storage.get("lastWortList");
   let localWortObj = storage.get("neuWorte");
-  if (lastWortIndexObj && lastWortListObj) {
-    if (!lastWortIndexObj.control) {
-      let lastIndexNo = lastWortIndexObj.value;
-      let lastWortList = lastWortListObj.value;
+  if (lastWortList) {
+    if (lastIndex.check) {
       let subList = lastWortList
-        .slice(lastIndexNo, lastWortList.length)
+        .slice(lastIndex.value, lastWortList.length)
         .join(", ");
       exList = confirm(
         `🛸Son sorguda islem yapilamamis kelimeler tespit edildi!\n📋Eski kelimelerden devam edilsin mi?\n\n🔖Kelime listesi: ${subList}`
       );
       exList = exList ? subList : false;
     }
-    storage.newKey("wortListIndex", "control", false);
+    storage.newKey("lastIndex","check",false);
   }
   if (!!exList) {
-    if (lastWortIndexObj) storage.remove("wortListIndex");
+    if (lastWortIndexObj) storage.remove("lastIndex");
     return (abfrage.neu = exList);
   } else if (Object.keys(localWortObj).length > 0) {
     let localWortArr = [],

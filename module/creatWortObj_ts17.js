@@ -168,7 +168,7 @@ function checkWort(dcmnt) {
     
     if(_local_){
       userDef = Object.values(localWortObj[search_Wort])[0];
-      userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef}`:"";
+      userDef = !!userDef?` 💭 ${userDef}`:"";
     }
 
     if (!checkEl(doc.querySelector("section.rBox"))) {
