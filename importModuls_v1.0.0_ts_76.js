@@ -1,4 +1,4 @@
-import { runApp } from "./module/creatWortObj_ts17.js";
+import { runApp } from "./module/creatWortObj_ts18.js";
 import { getDoc } from "./module/documents_ts07.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
@@ -23,7 +23,7 @@ const reorganizer = (clear) => {
   window.reorganizer = reorganizer;
   if (clear) console.clear();
   let exList = false;
-  let lastIndex = storage.get("lastIndex",true);
+  let lastIndex = storage.get("lastIndex", true);
   let lastWortList = storage.get("lastWortList");
   let localWortObj = storage.get("neuWorte");
   if (lastWortList) {
@@ -36,7 +36,7 @@ const reorganizer = (clear) => {
       );
       exList = exList ? subList : false;
     }
-    storage.newKey("lastIndex","check",false);
+    storage.newKey("lastIndex", "check", false);
   }
   if (!!exList) {
     if (lastWortIndexObj) storage.remove("lastIndex");
@@ -179,38 +179,35 @@ await loadBase()
 
 function changeLocalWorte() {
   //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-  let  archive = storage.get("allAlteWorte");
+  let archive = storage.get("allAlteWorte");
   if (!archive) archive = {};
 
-  Object.keys(localWortObj).forEach(srchWort => {
+  Object.keys(localWortObj).forEach((srchWort) => {
     let result = false;
     for (let i = 0; i < wortObjsArr.length; i++) {
       if (srchWort == wortObjsArr[i].wrt.wort) {
-        console.log(srchWort)
-        debugger
         result = true;
       } else {
-        if(wortObjsArr[i].searchParams[srchWort] === false){
-           wortObjsArr[i].searchParams[srchWort] =true
-           console.log(srchWort, wortObjsArr[i].wrt.wort,wortObjsArr[i].searchParams[srchWort] )
-           debugger
-           result =true
-        }
+        if (!!wortObjsArr[i].searchParams[srchWort])
+          wortObjsArr[i].searchParams[srchWort] = null;
+          result = true;
       }
-      if(result) break;
-      }      
+      if (result) break;
+    }
+
     if (result) {
       //neuWortListe'deki kelime archive yani @ri5: allAlteWorte'e tasinir
       if (!!archive[srchWort]) {
-        console.log(srchWort, "bu kelime arside var")
-        debugger
-        let subKey = Object.keys(localWortObj[srchWort])[0],subVal = Object.values(localWortObj[srchWort])[0];
-        Object.keys(archive[srchWort]).forEach(k=> {if(archive[srchWort][k] == false) delete archive[srchWort][k]}) 
+        console.log(srchWort, "bu kelime arside var");
+        let subKey = Object.keys(localWortObj[srchWort])[0],
+          subVal = Object.values(localWortObj[srchWort])[0];
+        Object.keys(archive[srchWort]).forEach((k) => {
+          if (archive[srchWort][k] == false) delete archive[srchWort][k];
+        });
         subVal = subVal == "Kelimeyi tanimla..." || !subVal ? false : subVal;
         archive[srchWort][subKey] = subVal;
       } else {
-        console.log(srchWort, "bu kelime arsive  yeni ekleniyor..")
-        debugger
+        console.log(srchWort, "bu kelime arsive  yeni ekleniyor..");
         archive[srchWort] = localWortObj[srchWort];
       }
       delete localWortObj[srchWort];
@@ -222,7 +219,7 @@ function changeLocalWorte() {
       );
     }
   });
-  storage.set("neuWorte",localWortObj);
+  storage.set("neuWorte", localWortObj);
   localWortObj = null;
   removeOldLocalWorte(archive);
 }

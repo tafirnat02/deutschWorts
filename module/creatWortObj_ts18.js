@@ -186,16 +186,14 @@ function checkWort(dcmnt) {
       let neuWort=false;
      for( let i in wortObjsArr){
         if(wort != wortObjsArr[i].wrt.wort)  continue;
-        console.log(i,  wortObjsArr[i],wortObjsArr[i].searchParams, wortObjsArr[i].searchParams[search_Wort], search_Wort)
-        debugger
-        wortObjsArr[i].searchParams[search_Wort]=false
+        wortObjsArr[i].searchParams[search_Wort]=true
         if(!!userDef) wortObjsArr[i].lang_TR += userDef
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
         neuWort=true
       }
       if(!neuWort){
         let newParam ={};
-        newParam[search_Wort]=false;
+        newParam[search_Wort]=true;
         app_pano.set("addSearchParams",newParam);
         !!userDef? app_pano.set("userDef",userDef):'';
       }
