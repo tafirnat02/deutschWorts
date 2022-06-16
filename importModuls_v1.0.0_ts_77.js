@@ -242,6 +242,9 @@ function removeOldLocalWorte(archive) {
     monat = !monat || monat < 1 ? false : monat > 12 ? 12 : monat;
     if (!monat) return;
   } else {
+    //yeni degerler allAlteWorte atanir...
+    storage.set("allAlteWorte", archive);
+    archive = null;
     return;
   }
 
