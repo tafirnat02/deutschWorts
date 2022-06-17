@@ -3,7 +3,7 @@ import { getDoc } from "./module/documents_ts13.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
-import { baseFun } from "./module/main_ts14.js";
+import { baseFun } from "./module/main_ts15.js";
 
 async function loadBase() {
   return new Promise((resolve, reject) => {
@@ -27,14 +27,16 @@ const reorganizer = (clear=false) => {
   let lastWortList = storage.get("lastWortList",true);
   let localWortObj = storage.get("neuWorte");
     if (!isNaN(parseInt(lastWortList.lastIndex))) {//<< indexde sayi olma durumunun kontrolü icin
-      let subList = lastWortList.value.slice(lastWortList.lastIndex)
+      if(!app_pano.get("lastIndex")){
+        let subList = lastWortList.value.slice(lastWortList.lastIndex)
       shortList=kurzeListe(subList)
       exList = confirm(
         `🛸Son sorguda islem yapilamamis kelimeler tespit edildi!\n📋Eski kelimelerden devam edilsin mi?\n\n🔖Kelime listesi: ${shortList}`
       );
       exList = exList ? subList =subList.join(", "): false;
       storage.remove("lastWortList","lastIndex");//objedeki index keyi lokalden kaldirlir...
-    return (abfrage.neu = exList);
+      return (abfrage.neu = exList);
+      }
   } else if (Object.keys(localWortObj).length > 0) {
     let localWortArr = [],
       allLocalList;
@@ -155,7 +157,7 @@ async function finish() {
     });
     result.then(msg.group());
   });
-  if(!app_pano.get("lastIndex")) storage.set("lastWortList", worteList, 3);
+  if(!app_pano.check("lastIndex")) storage.set("lastWortList", worteList, 3);
   console.log("\n");
   reorganizer();
 }

@@ -202,7 +202,7 @@ function setItems() {
         if(!this.check(key)) this.container[key]=value
     },
     get:function(key){//key varsa value atanmis ise value yoksa da true döner ve listeden cikarir.
-        let result = !!this.container[key]?this.container[key]:this.check(key)
+        let result = !!this.container[key]?this.container[key]:false
         delete this.container[key]
         return result
     },
