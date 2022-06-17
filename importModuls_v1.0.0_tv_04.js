@@ -26,7 +26,8 @@ const reorganizer = (clear=false) => {
   //let lastIndex = storage.get("lastIndex");
   let lastWortList = storage.get("lastWortList",true);
   let localWortObj = storage.get("neuWorte");
-    if (!isNaN(parseInt(lastWortList.lastIndex))) {//<< indexde sayi olma durumunun kontrolü icin
+    if (!isNaN(parseInt(lastWortList.lastIndex))) {
+      //ilk olarak 429 hatasi sebebiyle önceki sorguda alinamayan kelime kontrol edilir...
       if(!app_pano.get("lastIndex")){
         let subList = lastWortList.value.slice(lastWortList.lastIndex)
       shortList=kurzeListe(subList)
@@ -35,9 +36,10 @@ const reorganizer = (clear=false) => {
       );
       exList = exList ? subList =subList.join(", "): false;
       storage.remove("lastWortList","lastIndex");//objedeki index keyi lokalden kaldirlir...
-      return (abfrage.neu = exList);
+      if(!!exList) return (abfrage.neu = exList);
       }
   } else if (Object.keys(localWortObj).length > 0) {
+    //eger önceki sorgu sorunsuz tamamlanmis ise bu kezde lokalde kullanici kelimesi kontrol edilir...
     let localWortArr = [],
       allLocalList;
     for (let k_ in localWortObj) localWortArr.push(k_);
@@ -57,7 +59,7 @@ const reorganizer = (clear=false) => {
           msg.add(3, "Hata olustu! (m:importModuls, f:reorganizer)", error);
       }
     }
-  }
+  }//Herhangi bir husus yok ise bu halde kullaniciya yeni sorgu hatirlatmasi yapilir...
   let zBs= ' abfrage.neu = " Tüte "   oder   abfrage.neu = " Tüte, Haus, Fenster "',
   msgTxt= clear?"\nYeni kelime sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )":zBs;
   zBs = clear?zBs:null;
