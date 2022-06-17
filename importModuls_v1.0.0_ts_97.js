@@ -268,7 +268,7 @@ function removeOldLocalWorte(archive) {
 }
 
 function kurzeListe(arr,len=12){
-  if(arr.length <1) return false
-  let nList =  arr.slice(0, len).join(", ");
-  return  string(nList + arr.length>len?"..." : "");
+  if(arr.length <1) return false;
+  let nList =  arr.slice(0, len);nList = nList.join(", ");
+  return  `${nList}${arr.length>len?"..." : ""}`;
 }
