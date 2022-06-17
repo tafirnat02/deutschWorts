@@ -27,7 +27,7 @@ const reorganizer = (clear=false) => {
   let lastWortList = storage.get("lastWortList",true);
   let localWortObj = storage.get("neuWorte");
     if (!isNaN(parseInt(lastWortList.lastIndex))) {//<< indexde sayi olma durumunun kontrolü icin
-      let subList = lastWortList.value.slice(lastWortList.lastIndex, lastWortList.vaule.length)
+      let subList = lastWortList.value.slice(lastWortList.lastIndex, lastWortList.value.length)
         .join(", ");
       shortList=kurzeListe(subList)
       exList = confirm(
