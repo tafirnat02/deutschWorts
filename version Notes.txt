@@ -1,8 +1,12 @@
 
 
--kelimelerin cekimlerinin neulokal listeden kaldirilmasi problemi
-    keliemelerin alinmasi prblemli....
+if(!app_pano.get("lastIndex")) storage.set("lastWortList", worteList, 3);
 
--yüklendikten sonra cikan uyari silem sonrasinda cikmamasi gerekirken cikiyor
+yukaridaki kod lokal yurutulurkne hata alinmasi halinde kullaniciya son listeden devam edilmesi icin uyarida bulunmasi icin.
 
-sub keylerde tutulan tanimlama bilgisi ayni ise ilgili subKey kaldirilmali....
+ancak 429 hatasi sonrasi lastIndex lokala basilmakla beraber 
+reorganize() kisminda lastWortList().value.lenght derlenirken hata olusmakta...
+
+
+
+
