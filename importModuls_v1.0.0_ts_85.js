@@ -1,5 +1,5 @@
 import { runApp } from "./module/creatWortObj_ts19.js";
-import { getDoc } from "./module/documents_ts09.js";
+import { getDoc } from "./module/documents_ts10.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
@@ -116,7 +116,6 @@ async function controller() {
       ? storage.get("lastWortList")
       : [];
     let lastAbfrage = worteList.length === lastWortList.length &&  worteList.every((val, index) => val === lastWortList[index])
-    if(!lastAbfrage) storage.set("lastWortList", worteList, 3);//farkli oldugu tespit edilir ise öncelikle bu 429 hatasinda index bildirimi icin lokala atanir....
     return resolve (lastAbfrage)
   });
 }
@@ -145,6 +144,7 @@ async function get_langTR() {
 
 async function finish() {
   callNext = () => {}; //bos fonksiyon atanir
+  storage.set("lastWortList", worteList, 3);
   if (app_pano.get("localWorte")) changeLocalWorte.call();
   console.clear();
   msg.allPrint();

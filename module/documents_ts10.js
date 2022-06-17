@@ -39,6 +39,8 @@ const getDoc = async () => {
         }
       })
       .catch((err) => {
+        //storage kontrolü basta yapilir yoksa wortlist atamasi yapilir...
+        if(!storage.get("lastWortList")) storage.set("lastWortList", worteList, 3);
         let title = err === 429 ? `429 | ${wort}` : " ⚠️ Error";
         let msgTxt =
           err === 429
