@@ -144,7 +144,6 @@ async function get_langTR() {
 
 async function finish() {
   callNext = () => {}; //bos fonksiyon atanir
-  storage.set("lastWortList", worteList, 3);
   if (app_pano.get("localWorte")) changeLocalWorte.call();
   console.clear();
   msg.allPrint();
@@ -157,6 +156,7 @@ async function finish() {
     });
     result.then(msg.group());
   });
+  if(!app_pano.get("lastIndex")) storage.set("lastWortList", worteList, 3);
   console.log("\n");
   reorganizer();
 }
