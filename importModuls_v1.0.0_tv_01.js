@@ -30,7 +30,7 @@ const reorganizer = (clear=false) => {
     
 
       console.log(lastWortList )
-      console.log(isArray(lastWortList.value),lastWortList.value )
+      console.log(Array.isArray(lastWortList.value),lastWortList.value )
       let subList = lastWortList.value.slice(lastWortList.lastIndex).join(", ");
       console.log('subList', subList)
   debugger
