@@ -39,12 +39,7 @@ const getDoc = async () => {
         }
       })
       .catch((err) => {
-        //storage kontrolü basta yapilir yoksa wortlist atamasi yapilir...
-        if(!storage.get("lastWortList")){
-          storage.set("lastWortList", worteList, 3);
-          app_pano.set("lastIndex",true)
-        } 
-        let title = err === 429 ? `429 | ${wort}` : " ⚠️ Error";
+                let title = err === 429 ? `429 | ${wort}` : " ⚠️ Error";
         let msgTxt =
           err === 429
             ? `Alinamayan kelime: ${worteList[strt]}, indeks no: ${strt}`
@@ -58,6 +53,11 @@ const getDoc = async () => {
           err
         );
         //localStorage islemleri
+        //storage kontrolü basta yapilir yoksa wortlist atamasi yapilir...
+        if(!storage.get("lastWortList")){
+          storage.set("lastWortList", worteList, 3);
+          app_pano.set("lastIndex",true)
+        } 
         storage.newKey("lastWortList","lastIndex",strt)
         if(strt==0)callNext =finish //daha ilk kelime sorgusunda eger hata alinir ise... dogrudan finish yürütülür....
         finishDoc(HTMLdocuments); //hataya kadar alinan ögeler isleme alinir....
