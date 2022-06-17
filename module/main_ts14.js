@@ -154,14 +154,12 @@ function setItems() {
       return false;
     },
     remove: function (name,key=null) {
-      if(!key){
-        window.localStorage.removeItem(`@ri5: ${name}`);
-      }else{
-        let clone =  this.get(name,true);
-        if(!clone) return false
-        delete clone[key];
-        window.localStorage.setItem(`@ri5: ${name}`, JSON.stringify(clone));
-      }
+      if(!key){window.localStorage.removeItem(`@ri5: ${name}`);return}
+      let clone =  this.get(name,true);
+      if(!clone) return
+      window.localStorage.removeItem(`@ri5: ${name}`)
+      delete clone[key];
+      window.localStorage.setItem(`@ri5: ${name}`, JSON.stringify(clone));
     },
     addHour: function (hour) {
       //olusturulan zaman damgasi ile local storagedeki objenin güncelligi kontrol edilir.
@@ -170,16 +168,16 @@ function setItems() {
       );
     },
     newKey:function(name,nKey,nVal=false,childKey=false){
-      let cloneLocalObj =  this.get(name,true)
-      if(!cloneLocalObj) return //aranilan obje lokalde yoksa islemden cikilir
+      let clone =  this.get(name,true)
+      if(!clone) return false//aranilan obje lokalde yoksa islemden cikilir
       if(!!childKey){//key altinda yeni child key olusturur
-        if(!cloneLocalObj[childKey]) cloneLocalObj[childKey]={}
-            cloneLocalObj[childKey][nKey]=nVal
+        if(!clone[childKey]) clone[childKey]={}
+            clone[childKey][nKey]=nVal;
       }else{
-        //dorudan key olusturur
-         cloneLocalObj[nKey]=nVal; 
+         clone[nKey]=nVal; //dorudan key olusturur
       }
-      window.localStorage.setItem(`@ri5: ${name}`, JSON.stringify(cloneLocalObj));
+      window.localStorage.setItem(`@ri5: ${name}`, JSON.stringify(clone));
+      return true;
     }
   };
   //uygulama icerisinde yürütülen sürecin olup olmadigini kontrolü ve beklemesi icin

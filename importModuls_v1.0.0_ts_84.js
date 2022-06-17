@@ -1,9 +1,9 @@
 import { runApp } from "./module/creatWortObj_ts19.js";
-import { getDoc } from "./module/documents_ts08.js";
+import { getDoc } from "./module/documents_ts09.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
-import { baseFun } from "./module/main_ts13.js";
+import { baseFun } from "./module/main_ts14.js";
 
 async function loadBase() {
   return new Promise((resolve, reject) => {
@@ -111,14 +111,13 @@ async function controller() {
     }
     worteList.length = 0;
     worteList = [...new Set(abfrage.neu.split(",").map((item) => item.trim()))];
-    if (typeof wortObjsArr === "undefined") resolve(false);
+    if (typeof wortObjsArr === "undefined") return resolve(false);
     const lastWortList = storage.get("lastWortList")
       ? storage.get("lastWortList")
       : [];
-    resolve(
-      worteList.length === lastWortList.length &&
-        worteList.every((val, index) => val === lastWortList[index])
-    );
+    let lastAbfrage = worteList.length === lastWortList.length &&  worteList.every((val, index) => val === lastWortList[index])
+    if(!lastAbfrage) storage.set("lastWortList", worteList, 3);//farkli oldugu tespit edilir ise öncelikle bu 429 hatasinda index bildirimi icin lokala atanir....
+    return resolve (lastAbfrage)
   });
 }
 
@@ -147,7 +146,6 @@ async function get_langTR() {
 async function finish() {
   callNext = () => {}; //bos fonksiyon atanir
   if (app_pano.get("localWorte")) changeLocalWorte.call();
-  storage.set("lastWortList", worteList, 3);
   console.clear();
   msg.allPrint();
   wortObjsArr.forEach((w) => {
