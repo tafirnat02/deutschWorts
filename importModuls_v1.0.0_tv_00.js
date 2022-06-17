@@ -27,8 +27,14 @@ const reorganizer = (clear=false) => {
   let lastWortList = storage.get("lastWortList",true);
   let localWortObj = storage.get("neuWorte");
     if (!isNaN(parseInt(lastWortList.lastIndex))) {//<< indexde sayi olma durumunun kontrolü icin
-      let subList = lastWortList.value.slice(lastWortList.lastIndex, lastWortList.value.length)
-        .join(", ");
+    
+
+      console.log(lastWortList )
+      console.log(isArray(lastWortList.value),lastWortList.value )
+      let subList = lastWortList.value.slice(lastWortList.lastIndex).join(", ");
+      console.log('subList', subList)
+  debugger
+  
       shortList=kurzeListe(subList)
       exList = confirm(
         `🛸Son sorguda islem yapilamamis kelimeler tespit edildi!\n📋Eski kelimelerden devam edilsin mi?\n\n🔖Kelime listesi: ${shortList}`
@@ -268,10 +274,8 @@ function removeOldLocalWorte(archive) {
 }
 
 function kurzeListe(arr,len=12){
-
   if(arr.length <1) return false;
   let shrtArr =  arr.slice(0, len);
-  console.log(typeof shrtArr, shrtArr)
-  shrtArr= Array.isArray(shrtArr)? shrtArr.join(", "): typeof shrtArr;
+  shrtArr= Array.isArray(shrtArr)? shrtArr.join(", "): "";
   return  `${shrtArr}${arr.length>len?"..." : ""}`;
 }
