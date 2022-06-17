@@ -1,5 +1,5 @@
 import { runApp } from "./module/creatWortObj_ts19.js";
-import { getDoc } from "./module/documents_ts10.js";
+import { getDoc } from "./module/documents_ts12.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
