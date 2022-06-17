@@ -27,19 +27,12 @@ const reorganizer = (clear=false) => {
   let lastWortList = storage.get("lastWortList",true);
   let localWortObj = storage.get("neuWorte");
     if (!isNaN(parseInt(lastWortList.lastIndex))) {//<< indexde sayi olma durumunun kontrolü icin
-    
-
-      console.log(lastWortList )
-      console.log(Array.isArray(lastWortList.value),lastWortList.value )
-      let subList = lastWortList.value.slice(lastWortList.lastIndex).join(", ");
-      console.log('subList', subList)
-  debugger
-  
+      let subList = lastWortList.value.slice(lastWortList.lastIndex)
       shortList=kurzeListe(subList)
       exList = confirm(
         `🛸Son sorguda islem yapilamamis kelimeler tespit edildi!\n📋Eski kelimelerden devam edilsin mi?\n\n🔖Kelime listesi: ${shortList}`
       );
-      exList = exList ? subList : false;
+      exList = exList ? subList =subList.join(", "): false;
       storage.remove("lastWortList","lastIndex");//objedeki index keyi lokalden kaldirlir...
     return (abfrage.neu = exList);
   } else if (Object.keys(localWortObj).length > 0) {
