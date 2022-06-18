@@ -206,7 +206,7 @@ function changeLocalWorte() {
   localWortObj = null;
   removeOldLocalWorte(archive);
 
-
+/*
 
   Object.keys(localWortObj).forEach((srchWort) => {
     let result = false;
@@ -238,7 +238,7 @@ function changeLocalWorte() {
       notFound.push(srchWort);
     }
   });
-
+*/
   
 }
 
