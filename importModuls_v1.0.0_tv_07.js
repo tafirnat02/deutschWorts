@@ -215,11 +215,13 @@ function changeLocalWorte() {
     "Alttaki kelime/ler icin islem yapilamadi!", notFound.join(", ")
   );
   console.log('local list son durumu: ',localWortObj)
-  
+  console.log("tryWorte uzunluk:", notFound.length, notFound);
+  notFound=null
+
   storage.set("neuWorte", localWortObj);
   localWortObj = null;
   removeOldLocalWorte(archive);
-  console.log("tryWorte uzunluk:", tryWorte.length, tryWorte);
+  
 }
 
 function removeOldLocalWorte(archive) {
