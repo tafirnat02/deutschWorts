@@ -196,7 +196,7 @@ function changeLocalWorte() {
   msg.add(
     2,
     "Islem Yapilmayanlar",
-    "Alttaki kelime/ler icin islem yapilamadi!", localWortObj.join(", ")
+    "Alttaki kelime/ler icin islem yapilamadi!",  Object.keys(localWortObj).join(", ")
   );
   
   console.log('local list son durumu: ',localWortObj)
