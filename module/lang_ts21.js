@@ -7,16 +7,7 @@ var gapiAllLimit, index, len, key, userDef;
 //wortObjArr'da tutulan wortObj de TRlang kontrol edilir. Bos ise gapi den cevirisi alinmak üzere diger functionlara yönlendirilir
 
 const isEmptyLang = async () => {
-  /*
-  let localWrt = Object.keys(localWortObj)[index];
-  userDef = !!localWortObj ? Object.values(localWortObj[localWrt])[0] : "";
-  userDef = !!userDef && userDef != "Kelimeyi tanimla..." ? ` 💭 ${userDef} @ri5` : "";
-
-  if (wortObjsArr[index].lang_TR != "") {
-    wortObjsArr[index].lang_TR += userDef;
-    return trLang();
-  }
-  */
+ 
   //bu kisim api sisirmemesi icin.... silinecek....
   wortObjsArr[index].lang_TR += " 🔎  ceviri alindi.";
   return trLang();
