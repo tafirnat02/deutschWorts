@@ -7,6 +7,24 @@ yukaridaki kod lokal yurutulurkne hata alinmasi halinde kullaniciya son listeden
 ancak 429 hatasi sonrasi lastIndex lokala basilmakla beraber 
 reorganize() kisminda lastWortList().value.lenght derlenirken hata olusmakta...
 
+49  49.15825, 9.16539
+
+32  39.92465, 32.85557
+
+45
+________________________________________________
+arr.split(",").forEach(w=>{
+    let newObj={}, key = (new Date()).toLocaleString().replaceAll(' ','_');
+    newObj[key]="yeni tanimlar.....";
+    storage.newKey("neuWorte",w,newObj,"value")
+    
+    })
+
+let arr='abenteuerlustig,achtsam,achtungswert,adrett,agil,akkurat,akribisch,aktiv,aktuell,allerbest,allerliebst,
+ambitioniert,amüsant,andächtig,andersartig,anerkannt,angenehm,animierend,anmutig,ansprechend,anspruchsvoll,anständig,
+anziehend,apart,aphrodisierend,arbeitsam,arbeitswütig,arkadisch,atemberaubend,athletisch,attraktiv,aufbauend,auffallend,
+auffällig,aufmerksam,aufmunternd,aufrecht,aufreizend,aufrichtig,aufsehenerregend,ausdrucksstark,auserlesen,auserwählt,
+ausgefallen,ausgeflippt,ausgeglichen,ausgelassen,ausgereift,Fenster'
 
 
 
