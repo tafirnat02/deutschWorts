@@ -19,25 +19,26 @@ async function loadBase() {
   });
 }
 
-const reorganizer = (clear=false) => {
-  if(!window.reorganizer) window.reorganizer = reorganizer;
+const reorganizer = (clear = false) => {
+  if (!window.reorganizer) window.reorganizer = reorganizer;
   if (clear) console.clear();
-  let exList = false, shortList="";
+  let exList = false,
+    shortList = "";
   //let lastIndex = storage.get("lastIndex");
-  let lastWortList = storage.get("lastWortList",true);
+  let lastWortList = storage.get("lastWortList", true);
   let localWortObj = storage.get("neuWorte");
-    if (!isNaN(parseInt(lastWortList.lastIndex))) {
-      //ilk olarak 429 hatasi sebebiyle önceki sorguda alinamayan kelime kontrol edilir...
-      if(!app_pano.get("lastIndex")){
-        let subList = lastWortList.value.slice(lastWortList.lastIndex)
-      shortList=kurzeListe(subList)
+  if (!isNaN(parseInt(lastWortList.lastIndex))) {
+    //ilk olarak 429 hatasi sebebiyle önceki sorguda alinamayan kelime kontrol edilir...
+    if (!app_pano.get("lastIndex")) {
+      let subList = lastWortList.value.slice(lastWortList.lastIndex);
+      shortList = kurzeListe(subList);
       exList = confirm(
         `🛸Son sorguda islem yapilamamis kelimeler tespit edildi!\n📋Eski kelimelerden devam edilsin mi?\n\n🔖Kelime listesi: ${shortList}`
       );
-      exList = exList ? subList =subList.join(", "): false;
-      storage.remove("lastWortList","lastIndex");//objedeki index keyi lokalden kaldirlir...
-      if(!!exList) return (abfrage.neu = exList);
-      }
+      exList = exList ? (subList = subList.join(", ")) : false;
+      storage.remove("lastWortList", "lastIndex"); //objedeki index keyi lokalden kaldirlir...
+      if (!!exList) return (abfrage.neu = exList);
+    }
   } else if (Object.keys(localWortObj).length > 0) {
     //eger önceki sorgu sorunsuz tamamlanmis ise bu kezde lokalde kullanici kelimesi kontrol edilir...
     let localWortArr = [],
@@ -45,7 +46,7 @@ const reorganizer = (clear=false) => {
     for (let k_ in localWortObj) localWortArr.push(k_);
     //localWortArr.sort();
     allLocalList = localWortArr.join(",");
-    shortList= kurzeListe(localWortArr)
+    shortList = kurzeListe(localWortArr);
     let localWort = confirm(
       `🪃 Sayfada yakalanan kelimeler bulunmakta.\n🧭 Bu kelime listesi icin islem yapilsin mi?\n\n📌 Kelimeler: ${shortList}`
     );
@@ -59,14 +60,14 @@ const reorganizer = (clear=false) => {
           msg.add(3, "Hata olustu! (m:importModuls, f:reorganizer)", error);
       }
     }
-  }//Herhangi bir husus yok ise bu halde kullaniciya yeni sorgu hatirlatmasi yapilir...
-  let zBs= ' abfrage.neu = " Tüte "   oder   abfrage.neu = " Tüte, Haus, Fenster "',
-  msgTxt= clear?"\nYeni kelime sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )":zBs;
-  zBs = clear?zBs:null;
-   msg.print(
-    0,
-    "Yeni Sorgulama",msgTxt,zBs
-  );
+  } //Herhangi bir husus yok ise bu halde kullaniciya yeni sorgu hatirlatmasi yapilir...
+  let zBs =
+      ' abfrage.neu = " Tüte "   oder   abfrage.neu = " Tüte, Haus, Fenster "',
+    msgTxt = clear
+      ? `\nYeni kelime sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi cift tirnak ("Haus") kullanarak kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )`
+      : zBs;
+  zBs = clear ? zBs : null;
+  msg.print(0, "Yeni Sorgulama", msgTxt, zBs);
 };
 
 async function appStarter() {
@@ -118,8 +119,10 @@ async function controller() {
     const lastWortList = storage.get("lastWortList")
       ? storage.get("lastWortList")
       : [];
-    let lastAbfrage = worteList.length === lastWortList.length &&  worteList.every((val, index) => val === lastWortList[index])
-    return resolve (lastAbfrage)
+    let lastAbfrage =
+      worteList.length === lastWortList.length &&
+      worteList.every((val, index) => val === lastWortList[index]);
+    return resolve(lastAbfrage);
   });
 }
 
@@ -159,7 +162,7 @@ async function finish() {
     });
     result.then(msg.group());
   });
-  if(!app_pano.check("lastIndex")) storage.set("lastWortList", worteList, 3);
+  if (!app_pano.check("lastIndex")) storage.set("lastWortList", worteList, 3);
   console.log("\n");
   reorganizer();
 }
@@ -172,7 +175,8 @@ await loadBase()
 
 function changeLocalWorte() {
   //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-  let archive = storage.get("allAlteWorte");
+  let tryWorte = [],
+    archive = storage.get("allAlteWorte");
   if (!archive) archive = {};
 
   Object.keys(localWortObj).forEach((srchWort) => {
@@ -180,10 +184,9 @@ function changeLocalWorte() {
     for (let i = 0; i < wortObjsArr.length; i++) {
       if (srchWort == wortObjsArr[i].wrt.wort) {
         result = true;
-      } else {
-        if (!!wortObjsArr[i].searchParams[srchWort])
-          wortObjsArr[i].searchParams[srchWort] = null;
-          result = true;
+      } else if (!!wortObjsArr[i].searchParams[srchWort]) {
+        wortObjsArr[i].searchParams[srchWort] = null;
+        result = true;
       }
       if (result) break;
     }
@@ -192,9 +195,8 @@ function changeLocalWorte() {
       //neuWortListe'deki kelime archive yani @ri5: allAlteWorte'e tasinir
       if (!!archive[srchWort]) {
         let newKey = Object.keys(localWortObj[srchWort])[0],
-            newVal = Object.values(localWortObj[srchWort])[0]; 
+          newVal = Object.values(localWortObj[srchWort])[0];
         Object.keys(archive[srchWort]).forEach((k) => {
-console.log('kelime>old key/value: ', srchWort,k,archive[srchWort][k]) 
           if (!archive[srchWort][k]) delete archive[srchWort][k];
         });
         newVal = !!newVal ? newVal : null;
@@ -210,10 +212,12 @@ console.log('kelime>old key/value: ', srchWort,k,archive[srchWort][k])
         "Arama yapilan bu kelime, islem sonucunda alinan diger kelimelerle eslestirilemedi!"
       );
     }
+    tryWorte.push(srchWort);
   });
   storage.set("neuWorte", localWortObj);
   localWortObj = null;
   removeOldLocalWorte(archive);
+  console.log("tryWorte", tryWorte);
 }
 
 function removeOldLocalWorte(archive) {
@@ -270,9 +274,9 @@ function removeOldLocalWorte(archive) {
   archive = null;
 }
 
-function kurzeListe(arr,len=12){
-  if(arr.length <1) return false;
-  let shrtArr =  arr.slice(0, len);
-  shrtArr= Array.isArray(shrtArr)? shrtArr.join(", "): "";
-  return  `${shrtArr}${arr.length>len?"..." : ""}`;
+function kurzeListe(arr, len = 12) {
+  if (arr.length < 1) return false;
+  let shrtArr = arr.slice(0, len);
+  shrtArr = Array.isArray(shrtArr) ? shrtArr.join(", ") : "";
+  return `${shrtArr}${arr.length > len ? "..." : ""}`;
 }
