@@ -8,7 +8,7 @@ class Wort {
   wrt = {
     wort: "",
     plural: "",
-    genetiv:"",
+    genetiv: "",
     prefix: "",
     suffix: "",
     artikel: "",
@@ -72,10 +72,10 @@ class Wort {
     Gemischte: { txt: "gemischte Deklination" },
     Praedikativ: { txt: "als Prädikativ" },
     Pronomen: { txt: "Deklination des Pronomens" },
-    Artikel:{txt: "Deklination von Artikel"},
+    Artikel: { txt: "Deklination von Artikel" },
     Nomen: {},
   };
-  searchParams={};
+  searchParams = {};
 }
 
 const rpRegExp = /»|⁰|¹|²|³|⁴|⁵|⁶|⁷|⁸|⁹|\(|\)|\n/gi;
@@ -91,7 +91,7 @@ var doc, //alinan sayfa document'i
 
 async function runApp(dcmnt) {
   return new Promise((resolve) => {
-   getObject(dcmnt).then(() => {
+    getObject(dcmnt).then(() => {
       resolve(newWortObj);
     });
   });
@@ -99,10 +99,8 @@ async function runApp(dcmnt) {
 
 async function getObject(dcmnt) {
   try {
-    await checkWort(dcmnt).then((rslt)=>{
-      console.log(rslt)
-      debugger
-    }).catch((error) => {
+    debugger;
+    await checkWort(dcmnt).catch((error) => {
       throw { err: error, fun: "checkWort" };
     });
     await newWortObject().catch((error) => {
@@ -128,7 +126,7 @@ async function getObject(dcmnt) {
       await setTbls().catch((error) => {
         throw { err: error, fun: "setTbls" };
       });
-    }else{
+    } else {
       if (newWortObj.status.Adjektiv[0] !== "") {
         await getAdj().catch((error) => {
           throw { err: error, fun: "getAdj" };
@@ -150,7 +148,7 @@ async function getObject(dcmnt) {
       });
   } catch (errObj) {
     //msg.add():yeni mesaji dizine ekler, msg.print():hatayi dogrudan ekrana bastirir...
-    if(errObj.err !=  'nextWort'){
+    if (errObj.err != "nextWort") {
       let type = errObj.fun === "checkWort" ? "add" : "print";
       window.msg[type](
         3,
@@ -159,50 +157,56 @@ async function getObject(dcmnt) {
         errObj.err
       );
     }
-    }
+  }
 }
 
 function checkWort(dcmnt) {
   return new Promise((resolve) => {
-    let userDef,exit=false; search_Wort=dcmnt[0],
-    _local_ =!!app_pano.check("localWorte");
+    let userDef,
+      exit = false,
+      search_Wort = dcmnt[0],
+      _local_ = !!app_pano.check("localWorte");
     wort = dcmnt[1].querySelector("form>div>input").value;
     doc = dcmnt[1];
-    
-    if(_local_){
+    console.log(wort, search_Wort)
+debugger
+    if (_local_) {
       userDef = Object.values(localWortObj[search_Wort])[0];
-      userDef = !!userDef?` 💭 ${userDef}`:null;
+      userDef = !!userDef ? ` 💭 ${userDef}` : null;
     }
     if (!checkEl(doc.querySelector("section.rBox"))) {
-      app_pano.set("notFound")//bu obje wortObjsArr eklenmemesi icin
-      if(_local_) delete localWortObj[search_Wort] //bulunamdi ise local objeden kaldirilir... 
-      if(!!search_Wort) throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${_local_ && !!userDef?'\n'+userDef:''}`;
-      exit =true
+      app_pano.set("notFound"); //bu obje wortObjsArr eklenmemesi icin
+      if (_local_) delete localWortObj[search_Wort]; //bulunamdi ise local objeden kaldirilir...
+      if (!!search_Wort)
+        throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${
+          _local_ && !!userDef ? "\n" + userDef : ""
+        }`;
+      exit = true;
     }
 
-    if(!_local_ || exit) return resolve('1. kisim');
-    let newParam ={};
-    newParam[search_Wort]= localWortObj[search_Wort];
-    app_pano.set("newParam",newParam);
-    if(!!userDef) app_pano.set("userDef",userDef);
-    if(wort != search_Wort){
-     //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
-     for( let i in wortObjsArr){
-        if(wort != wortObjsArr[i].wrt.wort)  continue;
-      debugger
-        wortObjsArr[i].searchParams[search_Wort]=localWortObj[search_Wort]
-        if(!!userDef) wortObjsArr[i].lang_TR += userDef
+    if (!_local_ || exit) return resolve("1. kisim");
+    let newParam = {};
+    newParam[search_Wort] = localWortObj[search_Wort];
+    app_pano.set("newParam", newParam);
+    if (!!userDef) app_pano.set("userDef", userDef);
+    if (wort != search_Wort) {
+      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
+      for (let i in wortObjsArr) {
+        if (wort != wortObjsArr[i].wrt.wort) continue;
+        debugger;
+        wortObjsArr[i].searchParams[search_Wort] = localWortObj[search_Wort];
+        if (!!userDef) wortObjsArr[i].lang_TR += userDef;
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
-        debugger 
-        break; 
+        debugger;
+        break;
         // bu ayni kelime masatrli halde isleme alindigini bildririr.
         //Bu nedenle sonraki kelime anlamlandirma, image vs islemleri yapilmamali...
       }
-      msg.add(4,search_Wort,`Bu kelime, "${wort}" olarak islem yapildi!`);
+      msg.add(4, search_Wort, `Bu kelime, "${wort}" olarak islem yapildi!`);
     }
-    console.log('silinen: ', localWortObj[search_Wort])
-    delete localWortObj[search_Wort] //islem yapilan kelime clone localWortObj'den kaldirilir...
-    return resolve('2.kisim');
+    console.log("silinen: ", localWortObj[search_Wort]);
+    delete localWortObj[search_Wort]; //islem yapilan kelime clone localWortObj'den kaldirilir...
+    return resolve("2.kisim");
   });
 }
 
@@ -211,10 +215,10 @@ function newWortObject() {
     //Wort sinifindan nesen olusturulmasi...
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
-    if(app_pano.check("newParam")){
-      newWortObj.searchParams= app_pano.get("newParam")
-      let userDef = app_pano.get("userDef")
-      newWortObj.lang_TR += !!userDef?userDef:"";
+    if (app_pano.check("newParam")) {
+      newWortObj.searchParams = app_pano.get("newParam");
+      let userDef = app_pano.get("userDef");
+      newWortObj.lang_TR += !!userDef ? userDef : "";
     }
     //kelime tipinin alinmasi
     newWortObj.status.Situation[0] = doc.querySelector(
@@ -370,13 +374,13 @@ function setFall() {
 function setTbls() {
   return new Promise((resolve) => {
     let allContent = doc.querySelectorAll('div[class="vTbl"]');
-      allContent.forEach((itm) => {
-          let headTag = itm.querySelector('h2')!= null?'h2':'h3';
-          let tblHead = itm.querySelector(headTag).innerText;
-           if( typeof newWortObj.tbl[tblHead] === 'undefined'){
-               newWortObj.tbl[tblHead] =itm.querySelector('table').innerHTML
-           }
-      });
+    allContent.forEach((itm) => {
+      let headTag = itm.querySelector("h2") != null ? "h2" : "h3";
+      let tblHead = itm.querySelector(headTag).innerText;
+      if (typeof newWortObj.tbl[tblHead] === "undefined") {
+        newWortObj.tbl[tblHead] = itm.querySelector("table").innerHTML;
+      }
+    });
 
     resolve();
   });
@@ -416,10 +420,10 @@ function getDeklinationTbls() {
         } else if (cnt.includes(newWortObj.othrTbls.Pronomen.txt)) {
           addTrVal(itm, "Pronomen");
           delete newWortObj.othrTbls.Pronomen.txt;
-        }else if (cnt.includes(newWortObj.othrTbls.Artikel.txt)) {
+        } else if (cnt.includes(newWortObj.othrTbls.Artikel.txt)) {
           addTrVal(itm, "Artikel");
           delete newWortObj.othrTbls.Artikel.txt;
-        }else{
+        } else {
           addTrVal(itm, "Nomen");
         }
       });
@@ -441,7 +445,7 @@ function getDeklinationTbls() {
         });
       });
     };
-    othrTbls.call()
+    othrTbls.call();
   });
 }
 
@@ -511,4 +515,3 @@ function getLang() {
     resolve();
   });
 }
-
