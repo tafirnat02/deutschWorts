@@ -193,12 +193,14 @@ function checkWort(dcmnt) {
         wortObjsArr[i].searchParams[search_Wort]=localWortObj[search_Wort]
         if(!!userDef) wortObjsArr[i].lang_TR += userDef
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
+        debugger 
         break; 
         // bu ayni kelime masatrli halde isleme alindigini bildririr.
         //Bu nedenle sonraki kelime anlamlandirma, image vs islemleri yapilmamali...
       }
       msg.add(4,search_Wort,`Bu kelime, "${wort}" olarak islem yapildi!`);
     }
+    console.log('silinen: ', localWortObj[search_Wort])
     delete localWortObj[search_Wort] //islem yapilan kelime clone localWortObj'den kaldirilir...
     return resolve('2.kisim');
   });
