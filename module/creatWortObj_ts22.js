@@ -99,7 +99,10 @@ async function runApp(dcmnt) {
 
 async function getObject(dcmnt) {
   try {
-    await checkWort(dcmnt).catch((error) => {
+    await checkWort(dcmnt).then((rslt)=>{
+      console.log(rslt)
+      debugger
+    }).catch((error) => {
       throw { err: error, fun: "checkWort" };
     });
     await newWortObject().catch((error) => {
@@ -161,7 +164,7 @@ async function getObject(dcmnt) {
 
 function checkWort(dcmnt) {
   return new Promise((resolve) => {
-    let userDef, search_Wort=dcmnt[0],
+    let userDef,exit=false; search_Wort=dcmnt[0],
     _local_ =!!app_pano.check("localWorte");
     wort = dcmnt[1].querySelector("form>div>input").value;
     doc = dcmnt[1];
@@ -170,47 +173,34 @@ function checkWort(dcmnt) {
       userDef = Object.values(localWortObj[search_Wort])[0];
       userDef = !!userDef?` 💭 ${userDef}`:null;
     }
-
     if (!checkEl(doc.querySelector("section.rBox"))) {
       app_pano.set("notFound")//bu obje wortObjsArr eklenmemesi icin
       if(_local_) delete localWortObj[search_Wort] //bulunamdi ise local objeden kaldirilir... 
       if(!!search_Wort) throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${_local_ && !!userDef?'\n'+userDef:''}`;
+      exit =true
     }
 
-    if(!_local_) return resolve();
-    let neuWort=false, newParam ={};
-    if(wort == search_Wort){
-      newParam[wort]=userDef;
-      app_pano.set("newParam",newParam);
-      !!userDef? app_pano.set("userDef",userDef):'';
-    }else{
+    if(!_local_ || exit) return resolve('1. kisim');
+    let newParam ={};
+    newParam[search_Wort]= localWortObj[search_Wort];
+    app_pano.set("newParam",newParam);
+    if(!!userDef) app_pano.set("userDef",userDef);
+    if(wort != search_Wort){
      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
      for( let i in wortObjsArr){
         if(wort != wortObjsArr[i].wrt.wort)  continue;
-        
-        //sonraki süreci takip et...?
-      //eger bu ögede diger islemler sürdürülüyor ise bu durumda sonraki kelimeye gemesi saglanmali
-      //bunu icinde: 
-      /** -lokaldeki kelime silinip 
-       *  -throw ile hata firlatilmali... 
-       * bu islemin saglilkli isledigini check et...
-      
-      */debugger
-        wortObjsArr[i].searchParams[search_Wort]=userDef
+      debugger
+        wortObjsArr[i].searchParams[search_Wort]=localWortObj[search_Wort]
         if(!!userDef) wortObjsArr[i].lang_TR += userDef
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
-        neuWort=true
-        break;
-      }
-      if(!neuWort){
-        newParam[search_Wort]=userDef;
-        app_pano.set("newParam",newParam);
-        !!userDef? app_pano.set("userDef",userDef):'';
+        break; 
+        // bu ayni kelime masatrli halde isleme alindigini bildririr.
+        //Bu nedenle sonraki kelime anlamlandirma, image vs islemleri yapilmamali...
       }
       msg.add(4,search_Wort,`Bu kelime, "${wort}" olarak islem yapildi!`);
     }
-      delete localWortObj[search_Wort] //islem yapilan kelime clone localWortObj'den kaldirilir...
-      return resolve();
+    delete localWortObj[search_Wort] //islem yapilan kelime clone localWortObj'den kaldirilir...
+    return resolve('2.kisim');
   });
 }
 
@@ -219,8 +209,11 @@ function newWortObject() {
     //Wort sinifindan nesen olusturulmasi...
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
-      !!app_pano.check("newParam")?newWortObj.searchParams = app_pano.get("newParam"):"";
-      !!app_pano.check("userDef")?newWortObj.lang_TR= app_pano.get("userDef"):"";
+    if(app_pano.check("newParam")){
+      newWortObj.searchParams= app_pano.get("newParam")
+      let userDef = app_pano.get("userDef")
+      newWortObj.lang_TR += !!userDef?userDef:"";
+    }
     //kelime tipinin alinmasi
     newWortObj.status.Situation[0] = doc.querySelector(
       "article>div>nav>a[href]"

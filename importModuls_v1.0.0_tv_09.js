@@ -178,9 +178,19 @@ function changeLocalWorte() {
     archive = storage.get("allAlteWorte");
   if (!archive) archive = {};
   wortObjsArr.forEach(w=>{
-    Object.keys(w.searchParams).forEach(keyWort =>{
+    Object.keys(w.searchParams).forEach(srchWort =>{
       console.log(w.wrt.wort, w.searchParams,w)
-      archive[keyWort] =  w.searchParams[keyWort]
+      if (!!archive[srchWort]) {
+        let newKey = Object.keys( w.searchParams[srchWort])[0],
+          newVal = Object.values( w.searchParams[srchWort])[0];
+        Object.keys(archive[srchWort]).forEach((k) => {
+          if (!archive[srchWort][k]) delete archive[srchWort][k];
+        });
+        newVal = !!newVal ? newVal : null;
+        archive[srchWort][newKey] = newVal;
+      } else {
+        archive[srchWort] = localWortObj[srchWort];
+      }
     })
   })
   msg.add(
@@ -197,7 +207,7 @@ function changeLocalWorte() {
   removeOldLocalWorte(archive);
 
 
-/*
+
   Object.keys(localWortObj).forEach((srchWort) => {
     let result = false;
     for (let i = 0; i < wortObjsArr.length; i++) {
@@ -227,7 +237,7 @@ function changeLocalWorte() {
     } else {
       notFound.push(srchWort);
     }
-  });*/
+  });
 
   
 }
