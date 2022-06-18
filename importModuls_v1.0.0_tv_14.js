@@ -1,4 +1,4 @@
-import { runApp } from "./module/creatWortObj_ts20.js";
+import { runApp } from "./module/creatWortObj_ts23.js";
 import { getDoc } from "./module/documents_ts13.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
