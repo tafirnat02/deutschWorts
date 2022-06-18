@@ -168,7 +168,7 @@ function checkWort(dcmnt) {
     
     if(_local_){
       userDef = Object.values(localWortObj[search_Wort])[0];
-      userDef = !!userDef?` 💭 ${userDef}`:"";
+      userDef = !!userDef?` 💭 ${userDef}`:null;
     }
 
     if (!checkEl(doc.querySelector("section.rBox"))) {
@@ -178,27 +178,38 @@ function checkWort(dcmnt) {
     }
 
     if(!_local_) return resolve();
- 
+    let neuWort=false, newParam ={};
     if(wort == search_Wort){
+      newParam[wort]=userDef;
+      app_pano.set("newParam",newParam);
       !!userDef? app_pano.set("userDef",userDef):'';
     }else{
      //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
-      let neuWort=false;
      for( let i in wortObjsArr){
         if(wort != wortObjsArr[i].wrt.wort)  continue;
-        wortObjsArr[i].searchParams[search_Wort]=true
+        
+        //sonraki süreci takip et...?
+      //eger bu ögede diger islemler sürdürülüyor ise bu durumda sonraki kelimeye gemesi saglanmali
+      //bunu icinde: 
+      /** -lokaldeki kelime silinip 
+       *  -throw ile hata firlatilmali... 
+       * bu islemin saglilkli isledigini check et...
+      
+      */debugger
+        wortObjsArr[i].searchParams[search_Wort]=userDef
         if(!!userDef) wortObjsArr[i].lang_TR += userDef
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
         neuWort=true
+        break;
       }
       if(!neuWort){
-        let newParam ={};
-        newParam[search_Wort]=true;
-        app_pano.set("addSearchParams",newParam);
+        newParam[search_Wort]=userDef;
+        app_pano.set("newParam",newParam);
         !!userDef? app_pano.set("userDef",userDef):'';
       }
       msg.add(4,search_Wort,`Bu kelime, "${wort}" olarak islem yapildi!`);
     }
+      delete localWortObj[search_Wort] //islem yapilan kelime clone localWortObj'den kaldirilir...
       return resolve();
   });
 }
@@ -208,10 +219,8 @@ function newWortObject() {
     //Wort sinifindan nesen olusturulmasi...
     newWortObj = new Wort();
     newWortObj.wrt.wort = wort;
-
       !!app_pano.check("newParam")?newWortObj.searchParams = app_pano.get("newParam"):"";
       !!app_pano.check("userDef")?newWortObj.lang_TR= app_pano.get("userDef"):"";
-    
     //kelime tipinin alinmasi
     newWortObj.status.Situation[0] = doc.querySelector(
       "article>div>nav>a[href]"

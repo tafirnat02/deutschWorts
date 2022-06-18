@@ -27,4 +27,47 @@ auffällig,aufmerksam,aufmunternd,aufrecht,aufreizend,aufrichtig,aufsehenerregen
 ausgefallen,ausgeflippt,ausgeglichen,ausgelassen,ausgereift,Fenster'
 
 
+________________________________________________
+son kisimdaki localObjeden sonuc alinan kelimeler cratwortObj..*js modulunde ciarilmadan ölnceki kod grubu
+burada localObj üzerinden wortObjsArr ile karsilastirilarak soncu kismi allAlteWorte aktariliyordu, bunu y erine amaclanan dogrudan 
+wortObjsArr daki ögeleri alte worte aktarma ve halen localObj'de de öge varsa 429 hatasi sebebiyle veya baska nedenden bunlari yine 
+local sorgae göndermek...
+
+  Object.keys(localWortObj).forEach((srchWort) => {
+    let result = false;
+    
+    for (let i = 0; i < wortObjsArr.length; i++) {
+      if (wortObjsArr[i].wrt.wort.match(new RegExp(srchWort,"gi"))){  //srchWort == wortObjsArr[i].wrt.wort) {
+        result = true;
+      } else if (!!wortObjsArr[i].searchParams[srchWort]) {
+        wortObjsArr[i].searchParams[srchWort] = null;
+        result = true;
+      }
+      if (result) break;
+    }
+
+    if (result) {
+      //neuWortListe'deki kelime archive yani @ri5: allAlteWorte'e tasinir
+      if (!!archive[srchWort]) {
+        let newKey = Object.keys(localWortObj[srchWort])[0],
+          newVal = Object.values(localWortObj[srchWort])[0];
+        Object.keys(archive[srchWort]).forEach((k) => {
+          if (!archive[srchWort][k]) delete archive[srchWort][k];
+        });
+        newVal = !!newVal ? newVal : null;
+        archive[srchWort][newKey] = newVal;
+      } else {
+        archive[srchWort] = localWortObj[srchWort];
+      }
+      delete localWortObj[srchWort];
+    } else {
+      notFound.push(srchWort);
+    }
+  });
+  msg.add(
+    2,
+    "Islem Yapilmayanlar",
+    "Alttaki kelime/ler icin islem yapilamadi!", notFound.join(", ")
+  );
+
 

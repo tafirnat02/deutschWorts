@@ -175,10 +175,29 @@ await loadBase()
 
 function changeLocalWorte() {
   //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-  let notFound = [],
     archive = storage.get("allAlteWorte");
   if (!archive) archive = {};
+  wortObjsArr.forEach(w=>{
+    Object.keys(w.searchParams).forEach(keyWort =>{
+      console.log(w.wrt.wort, w.searchParams,w)
+      archive[keyWort] =  w.searchParams[keyWort]
+    })
+  })
+  msg.add(
+    2,
+    "Islem Yapilmayanlar",
+    "Alttaki kelime/ler icin islem yapilamadi!", localWortObj.join(", ")
+  );
+  
+  console.log('local list son durumu: ',localWortObj)
+  console.log('local list son durumu: ',archive)
 
+  storage.set("neuWorte", localWortObj);
+  localWortObj = null;
+  removeOldLocalWorte(archive);
+
+
+/*
   Object.keys(localWortObj).forEach((srchWort) => {
     let result = false;
     for (let i = 0; i < wortObjsArr.length; i++) {
@@ -208,19 +227,8 @@ function changeLocalWorte() {
     } else {
       notFound.push(srchWort);
     }
-  });
-  msg.add(
-    2,
-    "Islem Yapilmayanlar",
-    "Alttaki kelime/ler icin islem yapilamadi!", notFound.join(", ")
-  );
-  console.log('local list son durumu: ',localWortObj)
-  console.log("tryWorte uzunluk:", notFound.length, notFound);
-  notFound=null
+  });*/
 
-  storage.set("neuWorte", localWortObj);
-  localWortObj = null;
-  removeOldLocalWorte(archive);
   
 }
 
