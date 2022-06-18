@@ -175,7 +175,7 @@ await loadBase()
 
 function changeLocalWorte() {
   //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-    archive = storage.get("allAlteWorte");
+    let archive = storage.get("allAlteWorte");
   if (!archive) archive = {};
   wortObjsArr.forEach(w=>{
     Object.keys(w.searchParams).forEach(srchWort =>{
