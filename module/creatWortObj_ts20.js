@@ -174,7 +174,7 @@ function checkWort(dcmnt) {
     if (!checkEl(doc.querySelector("section.rBox"))) {
       app_pano.set("notFound")//bu obje wortObjsArr eklenmemesi icin
       if(_local_) delete localWortObj[search_Wort] //bulunamdi ise local objeden kaldirilir... 
-      throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${_local_ && !!userDef?'\n'+userDef:''}`;
+      if(!!search_Wort) throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${_local_ && !!userDef?'\n'+userDef:''}`;
     }
 
     if(!_local_) return resolve();

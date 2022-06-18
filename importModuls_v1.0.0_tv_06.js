@@ -1,4 +1,4 @@
-import { runApp } from "./module/creatWortObj_ts19.js";
+import { runApp } from "./module/creatWortObj_ts20.js";
 import { getDoc } from "./module/documents_ts13.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
@@ -64,7 +64,7 @@ const reorganizer = (clear = false) => {
   let zBs =
       ' abfrage.neu = " Tüte "   oder   abfrage.neu = " Tüte, Haus, Fenster "',
     msgTxt = clear
-      ? `\nYeni kelime sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi cift tirnak ("Haus") kullanarak kelime(leri) girin.\n(Coklu kelime sorgusu icin her kelime arasina virgü-',' konulmali. )`
+      ? `\nYeni kelime sorgusu yapmak icin 'abfrage.neu' ile alttaki örnekte oldugu gibi cift tirnak ("Haus") kullanarak kelime(leri) girin. Coklu kelime sorgusu icin her kelime arasina virgü/"," konulmali.`
       : zBs;
   zBs = clear ? zBs : null;
   msg.print(0, "Yeni Sorgulama", msgTxt, zBs);
@@ -175,14 +175,14 @@ await loadBase()
 
 function changeLocalWorte() {
   //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-  let tryWorte = [],
+  let notFound = [],
     archive = storage.get("allAlteWorte");
   if (!archive) archive = {};
 
   Object.keys(localWortObj).forEach((srchWort) => {
     let result = false;
     for (let i = 0; i < wortObjsArr.length; i++) {
-      if (srchWort == wortObjsArr[i].wrt.wort) {
+      if (wortObjsArr[i].wrt.wort.match(new RegExp(srchWort,"gi"))){  //srchWort == wortObjsArr[i].wrt.wort) {
         result = true;
       } else if (!!wortObjsArr[i].searchParams[srchWort]) {
         wortObjsArr[i].searchParams[srchWort] = null;
@@ -206,18 +206,20 @@ function changeLocalWorte() {
       }
       delete localWortObj[srchWort];
     } else {
-      msg.add(
-        2,
-        srchWort,
-        "Arama yapilan bu kelime, islem sonucunda alinan diger kelimelerle eslestirilemedi!"
-      );
+      notFound.push(srchWort);
     }
-    tryWorte.push(srchWort);
   });
+  msg.add(
+    2,
+    "Islem Yapilmayanlar",
+    "Alttaki kelime/ler icin islem yapilamadi!", notFound.join(", ")
+  );
+  console.log('local list son durumu: ',localWortObj)
+  
   storage.set("neuWorte", localWortObj);
   localWortObj = null;
   removeOldLocalWorte(archive);
-  console.log("tryWorte", tryWorte);
+  console.log("tryWorte uzunluk:", tryWorte.length, tryWorte);
 }
 
 function removeOldLocalWorte(archive) {
