@@ -91,8 +91,10 @@ var doc, //alinan sayfa document'i
 
 async function runApp(dcmnt) {
   return new Promise((resolve) => {
-    getObject(dcmnt).then(() => {
-      resolve(newWortObj);
+    getObject(dcmnt).then((result) => {
+      console.log(result)
+      if(result == "nextWort") return {}
+      return resolve(newWortObj);
     });
   });
 }
@@ -147,7 +149,6 @@ async function getObject(dcmnt) {
       });
   } catch (errObj) {
     //msg.add():yeni mesaji dizine ekler, msg.print():hatayi dogrudan ekrana bastirir...
-    debugger
     if (errObj.err != "nextWort") {
       let type = errObj.fun === "checkWort" ? "add" : "print";
       window.msg[type](
@@ -158,8 +159,7 @@ async function getObject(dcmnt) {
       );
     }
   }
-  debugger
-  return;
+  return reject("nextWort");
 }
 
 function checkWort(dcmnt) {
@@ -196,17 +196,17 @@ function checkWort(dcmnt) {
         wortObjsArr[i].searchParams[search_Wort] = localWortObj[search_Wort];
         if (!!userDef) wortObjsArr[i].lang_TR += userDef;
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
-        exit=true
+        exit=true;
+        app_pano.get("ahnelnWort");
+        if(!! window.notInfinitiveWorte){
+          let notInfinitiveWorte=[];window.notInfinitiveWorte=notInfinitiveWorte;
+          //aranilan kelime ile wortObjsArr'a öge olarak aktarilan mastarhalini farkli olmasi drumunda kullaniciya bildirilir.
+        }
+        notInfinitiveWorte.push([search_Wort,wort]);
         break;
       }
-      if(!! window.notInfinitiveWorte){
-        let notInfinitiveWorte=[];window.notInfinitiveWorte=notInfinitiveWorte;
-        //aranilan kelime ile wortObjsArr'a öge olarak aktarilan mastarhalini farkli olmasi drumunda kullaniciya bildirilir.
-      }
-      notInfinitiveWorte.push([search_Wort,wort]);
     }
     delete localWortObj[search_Wort]; //islem yapilan kelime clone localWortObj'den kaldirilir...
-    if(exit) debugger
     return exit? reject():resolve();
   });
 }
