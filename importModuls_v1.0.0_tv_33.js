@@ -163,8 +163,8 @@ async function finish() {
     result.then(msg.group());
   });
   if(!!window.notInfinitiveWorte){
+    msg.group(4,"Hinweis", "Infinitive hali dikkate alinarak kayit yapilan kelimeler.", true);
     notInfinitiveWorte.forEach(info=>{
-      msg.group(4,"Hinweis", "Infinitive hali dikkate alinarak kayit yapilan kelimeler.", true);
       console.log(`"${info[0]}" kelimesi "${info[1]}" olarak sonuclar icerisinde listelendi.!\n`);
     });
     msg.group()
@@ -211,48 +211,9 @@ function changeLocalWorte() {
   );
   }
   
-  
-  console.log('local list son durumu: ',localWortObj)
-  console.log('local list son durumu: ',archive)
-
   storage.set("neuWorte", localWortObj);
   localWortObj = null;
-  removeOldLocalWorte(archive);
-
-/*
-
-  Object.keys(localWortObj).forEach((srchWort) => {
-    let result = false;
-    for (let i = 0; i < wortObjsArr.length; i++) {
-      if (wortObjsArr[i].wrt.wort.match(new RegExp(srchWort,"gi"))){  //srchWort == wortObjsArr[i].wrt.wort) {
-        result = true;
-      } else if (!!wortObjsArr[i].searchParams[srchWort]) {
-        wortObjsArr[i].searchParams[srchWort] = null;
-        result = true;
-      }
-      if (result) break;
-    }
-
-    if (result) {
-      //neuWortListe'deki kelime archive yani @ri5: allAlteWorte'e tasinir
-      if (!!archive[srchWort]) {
-        let newKey = Object.keys(localWortObj[srchWort])[0],
-          newVal = Object.values(localWortObj[srchWort])[0];
-        Object.keys(archive[srchWort]).forEach((k) => {
-          if (!archive[srchWort][k]) delete archive[srchWort][k];
-        });
-        newVal = !!newVal ? newVal : null;
-        archive[srchWort][newKey] = newVal;
-      } else {
-        archive[srchWort] = localWortObj[srchWort];
-      }
-      delete localWortObj[srchWort];
-    } else {
-      notFound.push(srchWort);
-    }
-  });
-*/
-  
+  removeOldLocalWorte(archive)
 }
 
 function removeOldLocalWorte(archive) {
