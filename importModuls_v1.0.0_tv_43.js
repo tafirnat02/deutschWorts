@@ -1,5 +1,5 @@
 import { runApp } from "./module/creatWortObj_ts36.js";
-import { getDoc } from "./module/documents_ts13.js";
+import { getDoc } from "./module/documents_ts14.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
@@ -150,10 +150,9 @@ async function get_langTR() {
 }
 
 async function finish() {
-  let gleich = [],
-    local = app_pano.get("localWorte");
+  let gleich = [];
   callNext = () => {}; //bos fonksiyon atanir
-  if (local) changeLocalWorte.call();
+  if (app_pano.get("localWorte")) changeLocalWorte.call();
   console.clear();
   msg.allPrint();
   wortObjsArr.forEach((w) => {
@@ -185,11 +184,7 @@ async function finish() {
     console.log("olarak kelime sonuclari listelendi.");
     msg.group();
   }
-  !local && !app_pano.check("lastIndex")
-    ? storage.remove("lastWortList")
-    : !app_pano.check("lastIndex")
-    ? storage.set("lastWortList", worteList, 3)
-    : "";
+  storage.set("lastWortList", worteList, 3);
   console.log("\n");
   reorganizer();
 }

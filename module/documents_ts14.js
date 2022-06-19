@@ -26,7 +26,7 @@ const getDoc = async () => {
       .then((html) => {
         let parser = new DOMParser();
         let doc = parser.parseFromString(html, "text/html");
-        HTMLdocuments.push([wort,doc]);
+        HTMLdocuments.push([wort, doc]);
       })
       .then(() => {
         strt++;
@@ -39,7 +39,7 @@ const getDoc = async () => {
         }
       })
       .catch((err) => {
-                let title = err === 429 ? `429 | ${wort}` : " ⚠️ Error";
+        let title = err === 429 ? `429 | ${wort}` : " ⚠️ Error";
         let msgTxt =
           err === 429
             ? `Alinamayan kelime: ${worteList[strt]}, indeks no: ${strt}`
@@ -54,12 +54,15 @@ const getDoc = async () => {
         );
         //localStorage islemleri
         //storage kontrolü basta yapilir yoksa wortlist atamasi yapilir...
-        if(!storage.get("lastWortList")){
-          storage.set("lastWortList", worteList, 3);
-          app_pano.set("lastIndex",true)
-        } 
-        storage.newKey("lastWortList","lastIndex",strt)
-        if(strt==0)callNext =finish //daha ilk kelime sorgusunda eger hata alinir ise... dogrudan finish yürütülür....
+        if (!app_pano.check("localWorte")) {
+          if (!storage.get("lastWortList")) {
+            storage.set("lastWortList", worteList, 3);
+            app_pano.set("lastIndex", true);
+          }
+          storage.newKey("lastWortList", "lastIndex", strt);
+        }
+
+        if (strt == 0) callNext = finish; //daha ilk kelime sorgusunda eger hata alinir ise... dogrudan finish yürütülür....
         finishDoc(HTMLdocuments); //hataya kadar alinan ögeler isleme alinir....
       });
   };
@@ -74,5 +77,5 @@ const finishDoc = (docsVal) => {
   } else {
     HTMLdocs = docsVal;
   }
-  callNext()
+  callNext();
 };
