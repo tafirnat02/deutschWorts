@@ -12,6 +12,7 @@ const setDoc = async (callback) => {
   await callback(HTMLdocs[index]).then((obj) => {
     index++;
     //bulunamayan veya ayni olan kelime ise bu kelime dizine eklenmez
+    console.log(index, obj)
     if(!app_pano.get("notFound") && !app_pano.get("ahnelnWort")) wortObjsArr.push(obj); 
     docs(callback);
   });
