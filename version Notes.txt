@@ -1,17 +1,8 @@
+eger localden alinan liste yürütülürken hata alinmis 429 ise 
+bu durumda lokalde tanimlama bilgileri olacagi icin eger eslesiyor ise bu halinde
+kullanciya son liste yerine lokal kismini öner ve lokalde yürütülen son islemeden kalan kelimeler diye aciklama yap kisa...
 
 
-if(!app_pano.get("lastIndex")) storage.set("lastWortList", worteList, 3);
-
-yukaridaki kod lokal yurutulurkne hata alinmasi halinde kullaniciya son listeden devam edilmesi icin uyarida bulunmasi icin.
-
-ancak 429 hatasi sonrasi lastIndex lokala basilmakla beraber 
-reorganize() kisminda lastWortList().value.lenght derlenirken hata olusmakta...
-
-49  49.15825, 9.16539
-
-32  39.92465, 32.85557
-
-45
 ________________________________________________
 arr.split(",").forEach(w=>{
     let newObj={}, key = (new Date()).toLocaleString().replaceAll(' ','_');
