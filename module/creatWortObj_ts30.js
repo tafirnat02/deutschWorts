@@ -159,7 +159,7 @@ async function getObject(dcmnt) {
       );
     }
   }
-  return reject("nextWort");
+  return("nextWort");
 }
 
 function checkWort(dcmnt) {
