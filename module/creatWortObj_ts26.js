@@ -161,8 +161,8 @@ async function getObject(dcmnt) {
 }
 
 function checkWort(dcmnt) {
-  return new Promise((resolve) => {
-    let userDef,
+  return new Promise((resolve, reject) => {
+    let userDef, 
       search_Wort = dcmnt[0],
       _local_ = !!app_pano.check("localWorte");
     wort = dcmnt[1].querySelector("form>div>input").value;
@@ -179,14 +179,11 @@ function checkWort(dcmnt) {
         throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${
           _local_ && !!userDef ? "\n" + userDef : ""
         }`;
-      }else{
-        debugger
-        throw "nextWort"
       }
+      return reject()
     }
-
     if (!_local_) return resolve();
-    let newParam = {},  exit = false;
+    let newParam = {},exit = false;
     newParam[search_Wort] = localWortObj[search_Wort];
     app_pano.set("newParam", newParam);
     if (!!userDef) app_pano.set("userDef", userDef);
@@ -197,18 +194,17 @@ function checkWort(dcmnt) {
         wortObjsArr[i].searchParams[search_Wort] = localWortObj[search_Wort];
         if (!!userDef) wortObjsArr[i].lang_TR += userDef;
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
-        exit =true
+        exit=true
         break;
       }
-      let notInfinitiveWorte=[];
-      window.notInfinitiveWorte=notInfinitiveWorte;
-//aranilan kelime ile wortObjsArr'a öge olarak aktarilan mastarhalini farkli olmasi drumunda kullaniciya bildirilir.
+      if(!! window.notInfinitiveWorte){
+        let notInfinitiveWorte=[];window.notInfinitiveWorte=notInfinitiveWorte;
+        //aranilan kelime ile wortObjsArr'a öge olarak aktarilan mastarhalini farkli olmasi drumunda kullaniciya bildirilir.
+      }
       notInfinitiveWorte.push([search_Wort,wort]);
     }
-    console.log("silinen: ", localWortObj[search_Wort]);
     delete localWortObj[search_Wort]; //islem yapilan kelime clone localWortObj'den kaldirilir...
-    if(!!exit) throw("nextWort")
-    return resolve();
+    return !exit? resolve(): reject();
   });
 }
 
