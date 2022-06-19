@@ -27,6 +27,7 @@ const reorganizer = (clear = false) => {
   //let lastIndex = storage.get("lastIndex");
   let lastWortList = storage.get("lastWortList", true);
   let localWortObj = storage.get("neuWorte");
+
   if (!isNaN(parseInt(lastWortList.lastIndex))) {
     //ilk olarak 429 hatasi sebebiyle önceki sorguda alinamayan kelime kontrol edilir...
     if (!app_pano.get("lastIndex")) {
@@ -149,9 +150,9 @@ async function get_langTR() {
 }
 
 async function finish() {
-  let gleich=[]
+  let gleich=[], local =app_pano.get("localWorte");
   callNext = () => {}; //bos fonksiyon atanir
-  if (app_pano.get("localWorte")) changeLocalWorte.call();
+  if (local) changeLocalWorte.call();
   console.clear();
   msg.allPrint();
   wortObjsArr.forEach((w) => {
@@ -169,14 +170,15 @@ async function finish() {
     result.then(msg.group());
   });
   if(gleich.length>0){
-    msg.group(4,"Hinweis", "Infinitive hali dikkate alinarak kayit yapilan kelimeler.", true);
+    msg.group(4,"Hinweis", "Infinitive haline göre kayit edilen kelimeler.", true);
     gleich.forEach(info=>{
-      console.log(`"${info[1]}" kelimesine ait sonuclar "${info[0]}" olarak listelendi.!\n`);
+      console.log(`"${info[1]}" --> "${info[0]}"\n`);
     });
+    console.log('olarak kelime sonuclari listelendi.')
     msg.group()
   }
 
-  if (!app_pano.check("lastIndex")) storage.set("lastWortList", worteList, 3);
+  if (!local && !app_pano.check("lastIndex")) storage.set("lastWortList", worteList, 3);
   console.log("\n");
   reorganizer();
 }
