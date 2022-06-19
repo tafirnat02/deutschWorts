@@ -227,15 +227,18 @@ function changeLocalWorte() {
 
   storage.set("neuWorte", localWortObj);
   localWortObj = null;
-  removeOldLocalWorte();
+  removeOldLocalWorte(archive);
 }
 
-function removeOldLocalWorte() {
+function removeOldLocalWorte(wrtArchv) {
   //bunun ile lokalde tutulan "@ri5: archive" durumu kontrol edilerek sismeyi engeller...
-
+  storage.set("allAlteWorte", wrtArchv);    //yeni degerler allAlteWorte atanir...
+  wrtArchv = null;
   let limit = 1000,
     monat,
-    keys =  storage.get("allAlteWorte");
+    archive =storage.get("allAlteWorte"),
+    //keys = Object.keys(archive),
+    keys = Object.keys(allAlteWorte);
   if (keys.length > limit) {
     alert(
       `⛔ Lokalde ${limit}'den fazla kelime ve tanim bilgileri tutulmakta.\nEski tarihlilerden baslanarak silinecektir!`
@@ -249,9 +252,6 @@ function removeOldLocalWorte() {
     monat = !monat || monat < 1 ? false : monat > 12 ? 12 : monat;
     if (!monat) return;
   } else {
-    //yeni degerler allAlteWorte atanir...
-    storage.set("allAlteWorte", archive);
-    archive = null;
     return;
   }
 
