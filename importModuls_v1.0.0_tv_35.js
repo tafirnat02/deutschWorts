@@ -161,6 +161,7 @@ async function finish() {
       console.dir(w);
       let params = Object.keys(w.searchParams)
       if(params.length>0){
+        params = arr.filter(item=> {return item !== w.wrt.wort})
         gleich.push([w.wrt.wort, params.join(", ")])
       }
       resolve();
