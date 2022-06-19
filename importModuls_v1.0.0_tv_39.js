@@ -162,7 +162,7 @@ async function finish() {
       let params = Object.keys(w.searchParams)
       if(params.length>0){
         params = params.filter(item=> {return !!item && item != w.wrt.wort})
-        gleich.push([w.wrt.wort, params.join(", ")])
+        if(params.length>0) gleich.push([w.wrt.wort, params.join(", ")])
       }
       resolve();
     });
@@ -193,7 +193,6 @@ function changeLocalWorte() {
   if (!archive) archive = {};
   wortObjsArr.forEach(w=>{
     Object.keys(w.searchParams).forEach(srchWort =>{
-      console.log(w.wrt.wort, w.searchParams,w)
       if (!!archive[srchWort]) {
         let newKey = Object.keys( w.searchParams[srchWort])[0],
           newVal = Object.values( w.searchParams[srchWort])[0];
