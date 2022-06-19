@@ -54,7 +54,9 @@ const getDoc = async () => {
         );
         //localStorage islemleri
         //storage kontrolü basta yapilir yoksa wortlist atamasi yapilir...
-        if (!app_pano.check("localWorte")) {
+        if (app_pano.check("localWorte")){
+          app_pano.set("localIndex", true);
+        }else {
           if (!storage.get("lastWortList")) {
             storage.set("lastWortList", worteList, 3);
             app_pano.set("lastIndex", true);

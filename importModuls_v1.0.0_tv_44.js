@@ -1,5 +1,5 @@
 import { runApp } from "./module/creatWortObj_ts36.js";
-import { getDoc } from "./module/documents_ts14.js";
+import { getDoc } from "./module/documents_ts15.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
 import { getLang } from "./module/lang_ts21.js";
@@ -40,7 +40,7 @@ const reorganizer = (clear = false) => {
       storage.remove("lastWortList", "lastIndex"); //objedeki index keyi lokalden kaldirlir...
       if (!!exList) return (abfrage.neu = exList);
     }
-  } else if (Object.keys(localWortObj).length > 0) {
+  } else if (!app_pano.get("localIndex") && Object.keys(localWortObj).length > 0) {
     //eger önceki sorgu sorunsuz tamamlanmis ise bu kezde lokalde kullanici kelimesi kontrol edilir...
     let localWortArr = [],
       allLocalList;
