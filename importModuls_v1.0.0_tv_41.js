@@ -172,7 +172,7 @@ async function finish() {
   if(gleich.length>0){
     msg.group(4,"Hinweis", "Infinitive haline göre kayit edilen kelimeler.", true);
     gleich.forEach(info=>{
-      console.log(`"${info[1]}" --> "${info[0]}"\n`);
+      console.log(`  "${info[1]}" --> "${info[0]}"\n`);
     });
     console.log('olarak kelime sonuclari listelendi.')
     msg.group()
