@@ -188,7 +188,7 @@ function checkWort(dcmnt) {
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
         wortObjsArr[i].searchParams[search_Wort] = localWortObj[search_Wort];
         if (!!userDef) wortObjsArr[i].lang_TR += userDef;
-        if (!!window.notInfinitiveWorte) {
+        if (!window.notInfinitiveWorte) {
           let notInfinitiveWorte = [];
           window.notInfinitiveWorte = notInfinitiveWorte;
           //aranilan kelime ile wortObjsArr'a öge olarak aktarilan mastarhalini farkli olmasi drumunda kullaniciya bildirilir.
