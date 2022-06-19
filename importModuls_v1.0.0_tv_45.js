@@ -227,14 +227,15 @@ function changeLocalWorte() {
 
   storage.set("neuWorte", localWortObj);
   localWortObj = null;
-  removeOldLocalWorte(archive);
+  removeOldLocalWorte();
 }
 
-function removeOldLocalWorte(archive) {
+function removeOldLocalWorte() {
   //bunun ile lokalde tutulan "@ri5: archive" durumu kontrol edilerek sismeyi engeller...
+
   let limit = 1000,
     monat,
-    keys = Object.keys(archive);
+    keys =  storage.get("allAlteWorte");
   if (keys.length > limit) {
     alert(
       `⛔ Lokalde ${limit}'den fazla kelime ve tanim bilgileri tutulmakta.\nEski tarihlilerden baslanarak silinecektir!`
