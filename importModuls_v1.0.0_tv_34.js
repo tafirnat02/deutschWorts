@@ -1,4 +1,4 @@
-import { runApp } from "./module/creatWortObj_ts35.js";
+import { runApp } from "./module/creatWortObj_ts36.js";
 import { getDoc } from "./module/documents_ts13.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
@@ -149,6 +149,7 @@ async function get_langTR() {
 }
 
 async function finish() {
+  let gleich=[]
   callNext = () => {}; //bos fonksiyon atanir
   if (app_pano.get("localWorte")) changeLocalWorte.call();
   console.clear();
@@ -158,14 +159,18 @@ async function finish() {
       msg.group(1, w.wrt.wort, " kelimesi icin alinan sonuclar:");
       console.log(JSON.stringify(w));
       console.dir(w);
+      let params = Object.keys(w.searchParams)
+      if(params.length>0){
+        gleich.push([w.wrt.wort, params.join(", ")])
+      }
       resolve();
     });
     result.then(msg.group());
   });
-  if(!!window.notInfinitiveWorte){
+  if(gleich.length>0){
     msg.group(4,"Hinweis", "Infinitive hali dikkate alinarak kayit yapilan kelimeler.", true);
-    notInfinitiveWorte.forEach(info=>{
-      console.log(`"${info[0]}" kelimesi "${info[1]}" olarak sonuclar icerisinde listelendi.!\n`);
+    gleich.forEach(info=>{
+      console.log(`"${info[1]}" kelimesine ait sonuclar "${info[0]}" olarak listelendi.!\n`);
     });
     msg.group()
   }
