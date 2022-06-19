@@ -164,10 +164,10 @@ async function finish() {
   });
   if(!!window.notInfinitiveWorte){
     notInfinitiveWorte.forEach(info=>{
-      msg.group(4,"Hinweis", "Infinitive hali dikkate alinarak kayit yapilan kelimeler.", false);
+      msg.group(4,"Hinweis", "Infinitive hali dikkate alinarak kayit yapilan kelimeler.", true);
       console.log(`"${info[0]}" kelimesi "${info[1]}" olarak sonuclar icerisinde listelendi.!\n`);
     });
-    result.then(msg.group());
+    msg.group()
   }
 
   if (!app_pano.check("lastIndex")) storage.set("lastWortList", worteList, 3);
