@@ -158,6 +158,7 @@ async function getObject(dcmnt) {
       );
     }
   }
+  debugger
   return;
 }
 
@@ -168,7 +169,6 @@ function checkWort(dcmnt) {
       _local_ = !!app_pano.check("localWorte");
     wort = dcmnt[1].querySelector("form>div>input").value;
     doc = dcmnt[1];
-    console.log(wort, search_Wort)
     if (_local_) {
       userDef = Object.values(localWortObj[search_Wort])[0];
       userDef = !!userDef ? ` 💭 ${userDef}` : null;
@@ -181,6 +181,7 @@ function checkWort(dcmnt) {
           _local_ && !!userDef ? "\n" + userDef : ""
         }`;
       }
+      debugger
       return reject()
     }
     if (!_local_) return resolve();
@@ -205,7 +206,8 @@ function checkWort(dcmnt) {
       notInfinitiveWorte.push([search_Wort,wort]);
     }
     delete localWortObj[search_Wort]; //islem yapilan kelime clone localWortObj'den kaldirilir...
-    return !exit? resolve(): reject();
+    if(exit) debugger
+    return exit? reject():resolve();
   });
 }
 
