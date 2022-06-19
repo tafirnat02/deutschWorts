@@ -1,4 +1,4 @@
-import { runApp } from "./module/creatWortObj_ts24.js";
+import { runApp } from "./module/creatWortObj_ts25.js";
 import { getDoc } from "./module/documents_ts13.js";
 import { getWortObject } from "./module/getWortObj_ts05.js";
 import { getImg } from "./module/image_ts08.js";
@@ -162,6 +162,14 @@ async function finish() {
     });
     result.then(msg.group());
   });
+  if(!!window.notInfinitiveWorte){
+    notInfinitiveWorte.forEach(info=>{
+      msg.group(4,"Hinweis", "Infinitive hali dikkate alinarak kayit yapilan kelimeler.", false);
+      console.log(`"${info[0]}" kelimesi "${info[1]}" olarak sonuclar icerisinde listelendi.!\n`);
+    });
+    result.then(msg.group());
+  }
+
   if (!app_pano.check("lastIndex")) storage.set("lastWortList", worteList, 3);
   console.log("\n");
   reorganizer();
@@ -193,11 +201,16 @@ function changeLocalWorte() {
       }
     })
   })
-  msg.add(
+
+  let notRun=Object.keys(localWortObj)
+  if(notRun.length>0){
+    msg.add(
     2,
     "Islem Yapilmayanlar",
-    "Alttaki kelime/ler icin islem yapilamadi!",  Object.keys(localWortObj).join(", ")
+    "Alttaki kelime/ler icin islem yapilamadi!",  notRun.join(", ")
   );
+  }
+  
   
   console.log('local list son durumu: ',localWortObj)
   console.log('local list son durumu: ',archive)

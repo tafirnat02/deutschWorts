@@ -99,9 +99,8 @@ async function runApp(dcmnt) {
 
 async function getObject(dcmnt) {
   try {
-    debugger;
     await checkWort(dcmnt).catch((error) => {
-      throw { err: error, fun: "checkWort" };
+      throw { err: error, fun: "checkWort"};
     });
     await newWortObject().catch((error) => {
       throw { err: error, fun: "newWortObject" };
@@ -148,6 +147,7 @@ async function getObject(dcmnt) {
       });
   } catch (errObj) {
     //msg.add():yeni mesaji dizine ekler, msg.print():hatayi dogrudan ekrana bastirir...
+    debugger
     if (errObj.err != "nextWort") {
       let type = errObj.fun === "checkWort" ? "add" : "print";
       window.msg[type](
@@ -163,13 +163,11 @@ async function getObject(dcmnt) {
 function checkWort(dcmnt) {
   return new Promise((resolve) => {
     let userDef,
-      exit = false,
       search_Wort = dcmnt[0],
       _local_ = !!app_pano.check("localWorte");
     wort = dcmnt[1].querySelector("form>div>input").value;
     doc = dcmnt[1];
     console.log(wort, search_Wort)
-debugger
     if (_local_) {
       userDef = Object.values(localWortObj[search_Wort])[0];
       userDef = !!userDef ? ` 💭 ${userDef}` : null;
@@ -177,15 +175,18 @@ debugger
     if (!checkEl(doc.querySelector("section.rBox"))) {
       app_pano.set("notFound"); //bu obje wortObjsArr eklenmemesi icin
       if (_local_) delete localWortObj[search_Wort]; //bulunamdi ise local objeden kaldirilir...
-      if (!!search_Wort)
+      if (!!search_Wort){
         throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${
           _local_ && !!userDef ? "\n" + userDef : ""
         }`;
-      exit = true;
+      }else{
+        debugger
+        throw "nextWort"
+      }
     }
 
-    if (!_local_ || exit) return resolve("1. kisim");
-    let newParam = {};
+    if (!_local_) return resolve();
+    let newParam = {},  exit = false;
     newParam[search_Wort] = localWortObj[search_Wort];
     app_pano.set("newParam", newParam);
     if (!!userDef) app_pano.set("userDef", userDef);
@@ -193,20 +194,21 @@ debugger
       //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
       for (let i in wortObjsArr) {
         if (wort != wortObjsArr[i].wrt.wort) continue;
-        debugger;
         wortObjsArr[i].searchParams[search_Wort] = localWortObj[search_Wort];
         if (!!userDef) wortObjsArr[i].lang_TR += userDef;
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
-        debugger;
+        exit =true
         break;
-        // bu ayni kelime masatrli halde isleme alindigini bildririr.
-        //Bu nedenle sonraki kelime anlamlandirma, image vs islemleri yapilmamali...
       }
-      msg.add(4, search_Wort, `Bu kelime, "${wort}" olarak islem yapildi!`);
+      let notInfinitiveWorte=[];
+      window.notInfinitiveWorte=notInfinitiveWorte;
+//aranilan kelime ile wortObjsArr'a öge olarak aktarilan mastarhalini farkli olmasi drumunda kullaniciya bildirilir.
+      notInfinitiveWorte.push([search_Wort,wort]);
     }
     console.log("silinen: ", localWortObj[search_Wort]);
     delete localWortObj[search_Wort]; //islem yapilan kelime clone localWortObj'den kaldirilir...
-    return resolve("2.kisim");
+    if(!!exit) throw("nextWort")
+    return resolve();
   });
 }
 
