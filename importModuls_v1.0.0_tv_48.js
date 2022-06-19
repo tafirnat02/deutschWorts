@@ -210,7 +210,7 @@ function changeLocalWorte() {
         newVal = !!newVal ? newVal : null;
         archive[srchWort][newKey] = newVal;
       } else {
-        archive[srchWort] = localWortObj[srchWort];
+        archive[srchWort] = w.searchParams[srchWort];
       }
     });
   });
