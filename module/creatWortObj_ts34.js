@@ -100,7 +100,7 @@ async function runApp(dcmnt) {
 async function getObject(dcmnt) {
   try {
     await checkWort(dcmnt).catch((error) => {
-      throw { err: error, fun: "checkWort"};
+      throw { err: error, fun: "checkWort" };
     });
     await newWortObject().catch((error) => {
       throw { err: error, fun: "newWortObject" };
@@ -148,19 +148,19 @@ async function getObject(dcmnt) {
   } catch (errObj) {
     //msg.add():yeni mesaji dizine ekler, msg.print():hatayi dogrudan ekrana bastirir...
 
-      let type = errObj.fun === "checkWort" ? "add" : "print";
-      window.msg[type](
-        3,
-        ` ${wort} `,
-        `m:creatWortObj*.js f:${errObj.fun}`,
-        errObj.err
-      );
+    let type = errObj.fun === "checkWort" ? "add" : "print";
+    window.msg[type](
+      3,
+      ` ${wort} `,
+      `m:creatWortObj*.js f:${errObj.fun}`,
+      errObj.err
+    );
   }
 }
 
 function checkWort(dcmnt) {
   return new Promise((resolve, reject) => {
-    let userDef, 
+    let userDef,
       search_Wort = dcmnt[0],
       _local_ = !!app_pano.check("localWorte");
     wort = dcmnt[1].querySelector("form>div>input").value;
@@ -172,13 +172,12 @@ function checkWort(dcmnt) {
     if (!checkEl(doc.querySelector("section.rBox"))) {
       app_pano.set("notFound"); //bu obje wortObjsArr eklenmemesi icin
       if (_local_) delete localWortObj[search_Wort]; //bulunamdi ise local objeden kaldirilir...
-        throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${
-          _local_ && !!userDef ? "\n" + userDef : ""
-        }`;
-      
+      throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${
+        _local_ && !!userDef ? "\n" + userDef : ""
+      }`;
     }
     if (!_local_) return resolve();
-    let newParam = {},exit = false;
+    let newParam = {};
     newParam[search_Wort] = localWortObj[search_Wort];
     app_pano.set("newParam", newParam);
     if (!!userDef) app_pano.set("userDef", userDef);
@@ -189,17 +188,17 @@ function checkWort(dcmnt) {
         app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
         wortObjsArr[i].searchParams[search_Wort] = localWortObj[search_Wort];
         if (!!userDef) wortObjsArr[i].lang_TR += userDef;
-        exit=true;
-        if(!! window.notInfinitiveWorte){
-          let notInfinitiveWorte=[];window.notInfinitiveWorte=notInfinitiveWorte;
+        if (!!window.notInfinitiveWorte) {
+          let notInfinitiveWorte = [];
+          window.notInfinitiveWorte = notInfinitiveWorte;
           //aranilan kelime ile wortObjsArr'a öge olarak aktarilan mastarhalini farkli olmasi drumunda kullaniciya bildirilir.
         }
-        notInfinitiveWorte.push([search_Wort,wort]);
+        notInfinitiveWorte.push([search_Wort, wort]);
         break;
       }
     }
     delete localWortObj[search_Wort]; //islem yapilan kelime clone localWortObj'den kaldirilir...
-    return exit? reject():resolve();
+    return resolve();
   });
 }
 
