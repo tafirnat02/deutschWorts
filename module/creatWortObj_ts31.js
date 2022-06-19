@@ -93,7 +93,7 @@ async function runApp(dcmnt) {
   return new Promise((resolve) => {
     getObject(dcmnt).then((result) => {
       console.log(result)
-      if(result == "nextWort") return {}
+     // if(result == "nextWort") return {}
       return resolve(newWortObj);
     });
   });
