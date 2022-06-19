@@ -186,11 +186,10 @@ function checkWort(dcmnt) {
       //localde kullanici kelimeleri ile islem yapiliyorsa, bu kelimelerin mastar durumu ve önceden alinip alinmadigi kontrol edilir.
       for (let i in wortObjsArr) {
         if (wort != wortObjsArr[i].wrt.wort) continue;
+        app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
         wortObjsArr[i].searchParams[search_Wort] = localWortObj[search_Wort];
         if (!!userDef) wortObjsArr[i].lang_TR += userDef;
-        app_pano.set("ahnelnWort"); //bu obje wortObjsArr eklenmemesi icin
         exit=true;
-        app_pano.get("ahnelnWort");
         if(!! window.notInfinitiveWorte){
           let notInfinitiveWorte=[];window.notInfinitiveWorte=notInfinitiveWorte;
           //aranilan kelime ile wortObjsArr'a öge olarak aktarilan mastarhalini farkli olmasi drumunda kullaniciya bildirilir.
