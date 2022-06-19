@@ -176,7 +176,10 @@ function checkWort(dcmnt) {
         _local_ && !!userDef ? "\n" + userDef : ""
       }`;
     }
+
     if (!_local_) return resolve();
+
+   
     let newParam = {};
     newParam[search_Wort] = localWortObj[search_Wort];
     app_pano.set("newParam", newParam);
