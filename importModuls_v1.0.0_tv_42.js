@@ -150,7 +150,8 @@ async function get_langTR() {
 }
 
 async function finish() {
-  let gleich=[], local =app_pano.get("localWorte");
+  let gleich = [],
+    local = app_pano.get("localWorte");
   callNext = () => {}; //bos fonksiyon atanir
   if (local) changeLocalWorte.call();
   console.clear();
@@ -160,25 +161,35 @@ async function finish() {
       msg.group(1, w.wrt.wort, " kelimesi icin alinan sonuclar:");
       console.log(JSON.stringify(w));
       console.dir(w);
-      let params = Object.keys(w.searchParams)
-      if(params.length>0){
-        params = params.filter(item=> {return !!item && item != w.wrt.wort})
-        if(params.length>0) gleich.push([w.wrt.wort, params.join(", ")])
+      let params = Object.keys(w.searchParams);
+      if (params.length > 0) {
+        params = params.filter((item) => {
+          return !!item && item != w.wrt.wort;
+        });
+        if (params.length > 0) gleich.push([w.wrt.wort, params.join(", ")]);
       }
       resolve();
     });
     result.then(msg.group());
   });
-  if(gleich.length>0){
-    msg.group(4,"Hinweis", "Infinitive haline göre kayit edilen kelimeler.", true);
-    gleich.forEach(info=>{
+  if (gleich.length > 0) {
+    msg.group(
+      4,
+      "Hinweis",
+      "Infinitive haline göre kayit edilen kelimeler.",
+      true
+    );
+    gleich.forEach((info) => {
       console.log(`  "${info[1]}" --> "${info[0]}"\n`);
     });
-    console.log('olarak kelime sonuclari listelendi.')
-    msg.group()
+    console.log("olarak kelime sonuclari listelendi.");
+    msg.group();
   }
-
-  if (!local && !app_pano.check("lastIndex")) storage.set("lastWortList", worteList, 3);
+  !local && !app_pano.check("lastIndex")
+    ? storage.remove("lastWortList")
+    : !app_pano.check("lastIndex")
+    ? storage.set("lastWortList", worteList, 3)
+    : "";
   console.log("\n");
   reorganizer();
 }
@@ -191,13 +202,13 @@ await loadBase()
 
 function changeLocalWorte() {
   //Bu fonksiyon ile local neuWort>>allAleWort kismina tasinir...ve objelerde düzeneleme yapilir
-    let archive = storage.get("allAlteWorte");
+  let archive = storage.get("allAlteWorte");
   if (!archive) archive = {};
-  wortObjsArr.forEach(w=>{
-    Object.keys(w.searchParams).forEach(srchWort =>{
+  wortObjsArr.forEach((w) => {
+    Object.keys(w.searchParams).forEach((srchWort) => {
       if (!!archive[srchWort]) {
-        let newKey = Object.keys( w.searchParams[srchWort])[0],
-          newVal = Object.values( w.searchParams[srchWort])[0];
+        let newKey = Object.keys(w.searchParams[srchWort])[0],
+          newVal = Object.values(w.searchParams[srchWort])[0];
         Object.keys(archive[srchWort]).forEach((k) => {
           if (!archive[srchWort][k]) delete archive[srchWort][k];
         });
@@ -206,21 +217,22 @@ function changeLocalWorte() {
       } else {
         archive[srchWort] = localWortObj[srchWort];
       }
-    })
-  })
+    });
+  });
 
-  let notRun=Object.keys(localWortObj)
-  if(notRun.length>0){
+  let notRun = Object.keys(localWortObj);
+  if (notRun.length > 0) {
     msg.add(
-    2,
-    "Islem Yapilmayanlar",
-    "Alttaki kelime/ler icin islem yapilamadi!",  notRun.join(", ")
-  );
+      2,
+      "Islem Yapilmayanlar",
+      "Alttaki kelime/ler icin islem yapilamadi!",
+      notRun.join(", ")
+    );
   }
-  
+
   storage.set("neuWorte", localWortObj);
   localWortObj = null;
-  removeOldLocalWorte(archive)
+  removeOldLocalWorte(archive);
 }
 
 function removeOldLocalWorte(archive) {
