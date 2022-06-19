@@ -91,9 +91,7 @@ var doc, //alinan sayfa document'i
 
 async function runApp(dcmnt) {
   return new Promise((resolve) => {
-    getObject(dcmnt).then((result) => {
-      console.log(result)
-     // if(result == "nextWort") return {}
+    getObject(dcmnt).then(() => {
       return resolve(newWortObj);
     });
   });
@@ -149,7 +147,7 @@ async function getObject(dcmnt) {
       });
   } catch (errObj) {
     //msg.add():yeni mesaji dizine ekler, msg.print():hatayi dogrudan ekrana bastirir...
-    if (errObj.err != "nextWort") {
+
       let type = errObj.fun === "checkWort" ? "add" : "print";
       window.msg[type](
         3,
@@ -157,9 +155,7 @@ async function getObject(dcmnt) {
         `m:creatWortObj*.js f:${errObj.fun}`,
         errObj.err
       );
-    }
   }
-  return("nextWort");
 }
 
 function checkWort(dcmnt) {
@@ -176,13 +172,10 @@ function checkWort(dcmnt) {
     if (!checkEl(doc.querySelector("section.rBox"))) {
       app_pano.set("notFound"); //bu obje wortObjsArr eklenmemesi icin
       if (_local_) delete localWortObj[search_Wort]; //bulunamdi ise local objeden kaldirilir...
-      if (!!search_Wort){
         throw `"${wort}" wurde nicht gefunden! https://www.verbformen.de/?w=${wort}${
           _local_ && !!userDef ? "\n" + userDef : ""
         }`;
-      }
-      debugger
-      return reject()
+      
     }
     if (!_local_) return resolve();
     let newParam = {},exit = false;
